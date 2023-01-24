@@ -1,0 +1,25 @@
+
+    #print_Button , #save_Button , #title ,#example1_paginate,#example1_filter,#example1_length,#example1_info,
+    .opra,table.dataTable thead .sorting::after, table.dataTable thead .sorting_asc::after {
+        display: none;
+    }
+    #preview-area, body.dark-theme, .dark-theme .table , .dark-theme .card ,.dark-theme div,.dark-theme .card-body,.dark-theme .main-content ,.dark-theme .app-content {
+      background: #FFFFFF !important;
+      color:#000 !important;
+      opacity: 1 !important;
+      width:auto;
+      
+    }
+    .dark-theme .table{
+        vertical-align:middle;
+        padding-right: 5%;
+    }
+    #preview-area, .dark-theme table.dataTable thead th, .dark-theme table.dataTable thead td {
+      background: #FFFFFF !important;
+      color:#000 !important;
+     }
+   
+    td .noborder {
+      border: none;
+    }
+  

@@ -1,0 +1,61 @@
+[
+    {
+        "model-name": "Countries",
+        "resource-file": "countries.json",
+        "table-name": "countries"
+    },
+    {
+        "model-name": "States",
+        "resource-file": "states.json",
+        "table-name": "states"
+    },
+    {
+        "model-name": "vehicles",
+        "resource-file": "vehicles.json",
+        "table-name": "vehicles"
+    },
+    {
+        "model-name": "Car_marks",
+        "resource-file": "car_marks.json",
+        "table-name": "car_marks"
+    },
+    {
+        "model-name": "ships",
+        "resource-file": "ships.json"
+    },
+    {
+        "model-name": "Customers",
+        "resource-file": "customers.json",
+        "table-name": "customers"
+    },
+    {
+        "model-name": "Cars",
+        "resource-file": "cars.json",
+        "table-name": "cars"
+    },
+    {
+        "model-name": "Emportcars",
+        "resource-file": "emportcars.json",
+        "table-name": "emportcars"
+    },
+    {
+        "model-name": "guarantors",
+        "resource-file": "guarantors.json",
+        "table-name": "guarantors"
+    },
+    {
+        "model-name": "guarefrances",
+        "resource-file": "guarefrances.json",
+        "table-name": "guarefrances"
+    },
+    {
+        "model-name": "cardetails",
+        "resource-file": "cardetails.json",
+        "table-name": "cardetails"
+    },
+    {
+        "model-name": "intarnal_files",
+        "resource-file": "intarnal_files.json",
+        "table-name": "intarnal_files"
+    }
+]
