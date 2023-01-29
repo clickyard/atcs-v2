@@ -99,7 +99,11 @@
 								  ?>
                                 <tr>
                                     <td>{{ $i }}</td>
-									<td>{{ $customers->customer->name }}</td>
+									<td>
+									<a href="{{ route('emportcars.show', $customers->id ) }}" title="بيانات صاحب العربة">		
+						     			{{ $customers->customer->name }}
+									</a>
+								 </td>
 									<td>{{ $customers->carnetNo }} </td>
 									<td>{{ $customers->car->chassisNo}} </td>
 									<td>{{ $customers->entryDate }} </td>

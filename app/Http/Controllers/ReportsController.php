@@ -199,15 +199,17 @@ public function customer(Request $request){
   ///////////////////////////////////////////////////////////////////////
   public function cars($id)
   {
-      $customers = Customers::findOrFail($id);
+      //$customers = Customers::findOrFail($id);
+      $customers = Emportcars::with(['car.vehicle','customer.guarantor'])->findOrFail($id);
 
       return view('reports.cars', compact('customers'));
   }
     ///////////////////////////////////////////////////////////////////////
     public function luggages($id)
     {
-        $customers = Customers::findOrFail($id);
-  
+       // $customers = Customers::findOrFail($id);
+        $customers = Emportcars::with(['car.vehicle','customer:name,passport'])->findOrFail($id);
+
         return view('reports.luggages', compact('customers'));
     }
 //////////////////////////////////////////////////////////////////////////////

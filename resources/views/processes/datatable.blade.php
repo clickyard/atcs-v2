@@ -10,7 +10,7 @@
 					<td>تاريخ الدخول : {{ $customers->entryDate }}</td>
 					<td>نوع العربة :   {{ optional($customers->car->vehicle)->name }}</td>
 
-					<td>رقم الماكنة : {{ optional($customers->car)->machineNo }}</td>	
+					<td> الحالة: {{ optional($customers)->status_value }}</td>	
 											
 
 				</tr>
@@ -41,26 +41,26 @@
 					@if(optional($customers)->takhlees==1) <p> لا يوجد إجراءت هذه السيارة تم تخليصها</p> @endif
 					@if(optional($customers)->status==2) <p> لا يوجد إجراءت هذه السيارة تمت مغادرتها </p> @endif
 					
-					@if($customers->allow_increase == 1 && $customers->status != 0 && $customers->takhlees==0 )	
+					@if($customers->allow_increase == 1 && $customers->status != 0 && $customers->status != 2 && $customers->takhlees==0 )	
 						
 						<div class="col-lg-2">
 							<label class="rdiobox"><input name="type" value="2"  type="radio"  > <span>  تمديد</span></label>
 						</div>
 					@endif	
-					@if(optional($customers)->takhlees==0 && $customers->status==1)
+					@if(optional($customers)->takhlees==0 && $customers->status!=0 && $customers->status != 2)
 						<div class="col-lg-2 mg-t-20 mg-lg-t-0">
 							<label class="rdiobox"><input name="type" value="3" type="radio"  > <span> تخليص  </span></label>
 						</div>
 					@endif
-					@if(optional($customers)->status==1)	
+					@if(optional($customers)->takhlees==0 && optional($customers)->status != 2 && optional($customers)->status != 0)	
 						<div class="col-lg-2 mg-t-20 mg-lg-t-0">
 							<label class="rdiobox"><input  name="type" value="4"  type="radio"   > <span>مغادرة</span></label>
 						</div>
 					
-						<div class="col-lg-2 mg-t-20 mg-lg-t-0">
+						<!--<div class="col-lg-2 mg-t-20 mg-lg-t-0">
 							<label class="rdiobox"><input  name="type" value="5" type="radio"   > <span> ترحيل</span></label>
-						</div>
-						@if($customers->alerts==0)
+						</div>-->
+						@if($customers->alerts==0 && optional($customers)->status != 0 && $customers->takhlees==0  && $customers->status != 2)
 						<div class="col-lg-2 mg-t-20 mg-lg-t-0">
 							<label class="rdiobox"><input  name="type" value="6" type="radio"  > <span> بلاغ عن مخالفة</span></label>
 						</div>
@@ -78,10 +78,7 @@
 			<div class="row mg-t-20 ">
 			        <input type="hidden" name="emp_id"  value="{{$customers->id}}" />
 
-			        <div class="col-lg-4">
-							<label for="start_date" class=" control-label">    الرقم المتسلسل</label>
-							<div class=""><input class="form-control" name="serialNo" value=""  ></div>
-					</div>
+			       
 					<div class="col-lg-4">
 								<label for="start_date" class=" control-label">   تاريخ الدخول</label>
 								<div class="">
@@ -139,8 +136,15 @@
 				<input type="hidden" name="dura" value="{{$dura}}" />
 				<input type="hidden" name="allow"  value="{{$allow}}">  
 				<input type="hidden" name="status"  value="{{$status}}">  
-
-			    <div class="col-lg-3">
+				<input type="hidden" name="entryDate"  value="{{$customers->entryDate}}"> 
+			    
+				<div class="col-lg-3">
+								<label for="" class=" control-label"> رقم الايصال</label>
+								<div class="">
+									<input class="form-control" name="voucher" type="text" value=""  >
+					            </div>
+					</div>
+				<div class="col-lg-3">
 								<label for="start_date" class=" control-label">  التمديد لفترة </label>
 								<div class="">
 									<input class="form-control" name="status_value" type="text" value="{{$status_value}}"  readonly>
@@ -152,6 +156,7 @@
 									<input class="form-control" name="entryDate" type="text" value="{{$customers->entryDate}} -- {{$customers->exitDate}}"  readonly>
 							</div>
 					</div>-->
+					 
 					<div class="col-lg-3">
 						         <?php      $exDate= $customers->exitDate;
 											$end_date = date('Y-m-d', strtotime("+3 months", strtotime($exDate))); ?>
@@ -191,15 +196,27 @@
 	
 		<form method="POST" action="{{ route('leavingCars_update') }}"  >
           				  {{ csrf_field() }}
+
+						  مغادرة عربة
 							<input type="hidden" name="emp_id"  value="{{$customers->id}}" />
 							<input type="hidden" name="cus_id"  value="{{$customers->id}}" />
-			<div class="col-md-4">
+							<input type="hidden" name="entryDate"  value="{{$customers->entryDate}}"> 
+
+				
+				<div class="col-lg-3">
+					<label for="" class=" control-label"> رقم الايصال</label>
+					<div class="">
+						<input class="form-control" name="voucher" type="text" value=""  >
+					</div>
+				</div>
+		
+				<div class="col-lg-3">
 				<label for="exitDate" class=" control-label">تاريخ المغادرة</label>
 				<div class="">
 					<input class="form-control" name="exitDate" type="date" id="exitDate" value="" minlength="1" maxlength="10" required="true" placeholder="">
 				</div>
 			</div>
-			<div class="col-lg-4 mg-t-20"> 
+			<div class="col-lg-3 "> 
 			<button class="btn ripple btn-primary" type="submit" type="button">مغادرة</button>
 		</div>
 	</form>

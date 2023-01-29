@@ -85,20 +85,21 @@
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-							<!--	<h4> حالة السيارة :  {{ optional($customers->emportcar)->status_value }}   </h4>
-
-								<h3 class="card-title mg-b-0">بيانات صاحب عربة الإفراج المؤقت</h3>
+							<?php /*	<h4> حالة السيارة :  {{ optional($customers->emportcar)->status_value }}   </h4>
+*/ ?>
+						<!--	<h3 class="card-title mg-b-0">بيانات صاحب عربة الإفراج المؤقت</h3>
 									<h3 class="card-title mg-b-0">شعبة الإفراج المؤقــــــت</h3>-->
 								</div>
 							</div>
 						<div class="card-body" id="print" >
+						<img src="{{URL::asset('assets/img/carheader.png') }} "  width="100%" class="mg-b-30"/>
 
-							<div >
+							<!--<div >
 						    	<h5>التاريخ: {{date('d-m-Y')}}</h5>
 
 								<h3 class="text-center" style=" text-decoration: underline; text-decoration-skip-ink: none ">بيانات كشف عربة الإفراج المؤقت </h3>
 	                      			<br/>
-							</div>
+							</div>-->
 								<div class="table-responsive">
 									<table class="table table-bordered table-hover mg-b-50 text-md-nowrap">
 										<thead>
@@ -106,34 +107,34 @@
 										</thead>
 										<tbody>
 											<tr>
-											    <td>الاسم : {{ optional($customers)->name }}</td>
-												<td>تاريخ الدخول : {{ optional($customers->emportcar)->entryDate }}</td>
+											    <td>الاسم : {{ optional($customers)->customer->name }}</td>
+												<td>تاريخ الدخول : {{ optional($customers)->entryDate }}</td>
 												
 											</tr>
 											<tr>
-												<td>الرقم الوطني : {{ optional($customers)->nationalityNo }}</td>
-												<td>نهاية تاريخ الخروج والعودة : {{ optional($customers->emportcar)->exitDate }}</td>
+												<td>الرقم الوطني : {{ optional($customers)->customer->nationalityNo }}</td>
+												<td>نهاية تاريخ الخروج والعودة : {{ optional($customers)->exitDate }}</td>
 												
 											</tr>
 											<tr>
-												<td >رقم الإقامة : {{ optional($customers)->residenceNo }}</td>	
-												<td> تاريخ اصدار الجواز : {{ optional($customers)->passportDate }}</td>
+												<td >رقم الإقامة : {{ optional($customers)->customer->residenceNo }}</td>	
+												<td> تاريخ اصدار الجواز : {{ optional($customers)->customer->passportDate }}</td>
 											
 											</tr>
 											<tr>	
-											    <td>رقم الجواز : {{ optional($customers)->passport }}</td>
-												<td>تاري خ انتهاء االقامة   : {{ optional($customers)->residenceDate }}</td>
+											    <td>رقم الجواز : {{ optional($customers)->customer->passport }}</td>
+												<td>تاري خ انتهاء االقامة   : {{ optional($customers)->customer->residenceDate }}</td>
 												
 
 											</tr>
 											<tr>
-												<td>العنوان بالسودان :{{ optional($customers)->block }}/{{ optional($customers)->street }} /{{ optional($customers)->city }}/{{ optional($customers->State)->name }} </td>
-												<td>  التلفون : {{ optional($customers)->tel }}</td>
+												<td>العنوان بالسودان :{{ optional($customers)->customer->block }}/{{ optional($customers)->customer->street }} /{{ optional($customers)->customer->city }}/{{ optional($customers->customer->State)->name }} </td>
+												<td>  التلفون : {{ optional($customers)->customer->tel }}</td>
 
 											</tr>
 											<tr>
-												<td>العنوان بالخارج : {{ optional($customers->guarantor)->ghouseNo }}/{{ optional($customers->guarantor)->gstreet }} / {{ optional($customers->guarantor)->gcity }}/{{ optional($customers->guarantor->State)->name }} </td>
-												<td>التلفون : {{ optional($customers->guarantor)->gtel }}</td>
+												<td>العنوان بالخارج : {{ optional($customers->customer->guarantor)->ghouseNo }}/{{ optional($customers->guarantor)->gstreet }} / {{ optional($customers->guarantor)->gcity }}/{{ optional($customers->customer->guarantor->myState)->name }} </td>
+												<td>التلفون : {{ optional($customers->customer->guarantor)->gtel }}</td>
 
 											</tr>
 
@@ -142,22 +143,22 @@
 									<table class="table table-bordered  mg-b-50 text-md-nowrap">
 									<tbody>
 											<tr>
-											    <td>رقم الدفتر :   {{ optional($customers->emportcar)->carnetNo }} </td>
-												<td>تاريخ إصدار الدفتر : {{ optional($customers->emportcar)->issueDate }} </td>
+											    <td>رقم الدفتر :   {{ optional($customers)->carnetNo }} </td>
+												<td>تاريخ إصدار الدفتر : {{ optional($customers)->issueDate }} </td>
 											
 											</tr>
 											<tr>
-												<td>ميناء الشحن : {{ optional($customers->emportcar->Shippingport)->name }}</td>
-												<td>   جهة القدوم : {{ optional($customers->emportcar)->destination }}</td>
+												<td>ميناء الشحن : {{ optional($customers->Shippingport)->name }}</td>
+												<td>   جهة القدوم : {{ optional($customers)->destination }}</td>
 											</tr>
 											
 											<tr>	
-										    	<td> ميناء الوصول : {{ optional($customers->emportcar->Shippingport)->name }} </td>
-											    <td>اسم الباخرة : {{ optional($customers->emportcar->Ship)->name }}</td>
+										    	<td> ميناء الوصول : {{ optional($customers->Shippingport)->name }} </td>
+											    <td>اسم الباخرة : {{ optional($customers->Ship)->name }}</td>
 											</tr>
 											<tr>
-											    <td>الوكيل الملاحي : {{ optional($customers->emportcar)->shippingAgent }}</td>
-												<td>رقم إذن التسليم : {{ optional($customers->emportcar)->deliveryPerNo }}   </td>
+											    <td>الوكيل الملاحي : {{ optional($customers)->shippingAgent }}</td>
+												<td>رقم إذن التسليم : {{ optional($customers)->deliveryPerNo }}   </td>
 											</tr>
 										</tbody>
 									</table>

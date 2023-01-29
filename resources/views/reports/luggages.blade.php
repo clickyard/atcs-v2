@@ -73,8 +73,9 @@
 								</div>
 							</div>
 						<div class="card-body" id="print" >
-
-							<div >
+						<img src="{{URL::asset('assets/img/luggagHeader.png') }} "  width="100%" />
+						<hr></hr>
+							<div class="mg-t-50">
 						    	<h5>التاريخ: {{date('d-m-Y')}}</h5>
 
 								<h3 class="text-center" style=" text-decoration: underline; text-decoration-skip-ink: none ">
@@ -88,28 +89,28 @@
 									</h4>
 									<br/>
 							</div>
-								<div class="table-responsive">
-									<table class="table table-bordered table-hover mg-b-50 text-md-nowrap">
+								<div class="table-responsive" width="100%">
+									<table class=" table  table-bordered table-hover mg-b-50 text-md-nowrap  " width="100%">
 										<thead>
 											
 										</thead>
 										<tbody>
 											<tr>
-											    <td >الاسم : {{ optional($customers)->name }}</td>
+											    <td >الاسم : {{ optional($customers->customer)->name }}</td>
 												<td colspan=2>نوع العربة :   {{ optional($customers->car->vehicle)->name }}</td>
 												
 											</tr>
 											
 											<tr>	
-											    <td >رقم الجواز : {{ optional($customers)->passport }}</td>
+											    <td >رقم الجواز : {{ optional($customers->customer)->passport }}</td>
 												<td colspan=2>الموديل : {{ optional($customers->car->CarMark)->name }}</td>
 												
 											</tr> 
 											<tr>
 												<td> رقم اللوحة : {{ optional($customers->car)->plateNo }}</td>
 
-												<td>ميناء الشحن : {{ optional($customers->emportcar->Shippingport)->name }}</td>
-											    <td>اسم الباخرة : {{ optional($customers->emportcar->Ship)->name }}</td>
+												<td>ميناء الشحن : {{ optional($customers->Shippingport)->name }}</td>
+											    <td>اسم الباخرة : {{ optional($customers->Ship)->name }}</td>
 
 
 											</tr>
@@ -126,7 +127,7 @@
 									</h4>
 								</div>
 								<div>
-								<table class="table table-bordered table-hover mg-t-5 text-md-nowrap">
+								<table class="table mybadingtable table-bordered table-hover mg-t-5 text-md-nowrap" width="100%">
 									<tbody>			
 								        
 											<tr>
@@ -191,7 +192,7 @@
 							<br/>
 							
 							
-							<table class="table table-bordered  mg-b-50 text-md-nowrap">
+							<table class="table table-bordered  mg-b-50 text-md-nowrap mybadingtable" width="100%">
 								
 								<tbody>	
 										<tr>

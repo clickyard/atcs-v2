@@ -11,14 +11,14 @@ use App\Models\Emportcars;
 use App\Models\Ships;
 use App\Models\Shippingports;
 
-use App\Models\Leavingcars_files;
+use App\Models\Leavingcars;
 use App\Models\Increases;
 use App\Models\Traheel_files;
 use App\Models\Takhlees;
 use App\Models\Alerts;
 use App\Models\Revenues;
 use App\Models\Amounts;
-
+use App\Models\SerialNumber;
 
 use Illuminate\Http\Request;
 
@@ -54,26 +54,25 @@ class ProcessesController extends Controller
 
         break;
         case 2:
-            $title="  تمديد";
-
-            $processes = Emportcars::where('status', 1  )->get();
+            $title="مغادرة";
+            $processes = Leavingcars::latest()->first();
+            $emportcar= Emportcars::where('id', $processes->emp_id )->with(['customer','car'])->first();
             //return json_encode($data);
-            return view('processes.letters', compact('processes','type','title'));
+            return view('processes.letters', compact('processes','type','title','emportcar'));
             break; 
         case 3:
-            $title="تخليص";
-
-            $processes = Emportcars::where('status', 2  )->get();
-            //return json_encode($processes);
-            return view('processes.letters', compact('processes','type','title'));
+            $title="تمديد";
+            $processes = Increases::latest()->first();
+            $emportcar= Emportcars::where('id', $processes->emp_id )->with(['customer','car'])->first();
+            return view('processes.letters', compact('processes','type','title','emportcar'));
             break;
         case 4:
-            $title="مغادرة";
+            $title="بلاغ عن مخالفة";
 
-            $processes = Emportcars::where('status', 3 )->get();
-            //return $processes;
-            return view('processes.letters', compact('processes','type','title'));
-             break; 
+            $processes = Alerts::latest()->first();
+            $emportcar= Emportcars::where('id', $processes->emp_id )->with(['customer','car'])->first();
+            return view('processes.letters', compact('processes','type','title','emportcar'));
+            break; 
         case 5:
                 $title="تخليص";
 
@@ -82,8 +81,8 @@ class ProcessesController extends Controller
                 //return $processes;
                 return view('processes.letters', compact('processes','type','title','emportcar'));
                  break;
-        case 5:
-                    $title="تبليغ عن مخالفة";
+        case 6:
+                    $title=" ترحيل ";
     
                     $processes = Emportcars::where('status', 3 )->get();
                     //return $processes;
@@ -376,16 +375,14 @@ public function intarnalCars()
                 $attachment = '/storage/app/uploads/' . $filePath;
              
             }*/
-            $no=Increases::count();
-            $seri=$no+1;
+            $no=SerialNumber::firstOrFail();
+            $seri=$no->serialNo+1;
              $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
              Increases::create([
                 'serialNo' => $serialNo,
-                'voucher' => $request->voucher,
-                'entryDate'=>Date('Y-m-d'),
-                '
-                
-                '=>$request->exitDate,
+                'voucher' => $no->voucherNo+1,
+                'entryDate'=>$request->entryDate,
+                'exitDate'=>$request->end_date,
                 'signature' =>Auth::user()->name,
                 'emp_id'=>$request->emp_id
             ]);
@@ -400,11 +397,23 @@ public function intarnalCars()
                 'updated_by' => Auth::user()->name
             ]);
 
-          //  return redirect()->route('process')
-          //  ->with('success_message','تم التمديد لفترة اخرى بنجاح');
+            $amount = Amounts::firstOrFail();
+            $increase=($amount->increase);
+    
+            Revenues::where('emp_id',$request->emp_id)->update([
+                'increase' =>$increase,
+                'updated_by' => Auth::user()->name
+            ]);
 
-            $Customer = Customers::findOrFail($request->cus_id); 
-            return view('processes.increas_letter', compact('Customer','serialNo'));
+            SerialNumber::where('id', $no->id)->update([
+                'serialNo' => $no->serialNo+1,
+                'voucherNo' => $no->voucherNo+1,
+           ] );
+           return redirect()->route('letters', 3)
+           ->with('success_message','تم التمديد لفترة اخرى بنجاح');
+
+          //  $Customer = Customers::findOrFail($request->cus_id); 
+          //  return view('processes.increas_letter', compact('Customer','serialNo'));
 
             /*  $emportcars = Emportcars::findOrFail($id);
 
@@ -441,7 +450,7 @@ public function intarnalCars()
     public function leavingCars_update(Request $request)
     {   
         
-            $attachment="";
+          /*  $attachment="";
             $attachment2="";
             if($request->file()){
                 $file= $request->file('file_name');
@@ -463,23 +472,32 @@ public function intarnalCars()
                 $attachment = '/storage/app/uploads/' . $filePath;
                 $attachment2 = '/storage/app/uploads/' . $filePath2;
              
-            }
-
-            Leavingcars_files::create([
-                'serialNo' => $request->serialNo,
-                'exitDate' => $request->exitDate,
-                'leaving_file' =>$attachment,
-                'insurance_file'=>$attachment2,
+            }*/
+            $no=SerialNumber::firstOrFail();
+            $seri=$no->serialNo+1;
+             $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
+             Leavingcars::create([
+                'serialNo' => $serialNo,
+                'voucher' => $no->voucherNo+1,
+                'entryDate'=>$request->entryDate,
+                'exitDate'=>$request->exitDate,
+                //'insurance_file'=>$attachment,
+                'signature' =>Auth::user()->name,
                 'emp_id'=>$request->emp_id
             ]);
+
 
             Emportcars::where('id', $request->emp_id)->update([
                 'status' => 2,
                 'status_value' => 'غادرت',
-                'updated_by' => Auth::Id()
+                'updated_by' =>Auth::user()->name,
             ]);
 
-            return redirect()->route('intarnalCars')
+            SerialNumber::where('id', $no->id)->update([
+                'serialNo' => $no->serialNo+1,
+                'voucherNo' => $no->voucherNo+1,
+           ] );
+            return redirect()->route('letters', 2)
             ->with('success_message','لقد تمت مغادرة السيارة  بنجاح');
 
    
@@ -489,8 +507,8 @@ public function intarnalCars()
  public function update_takhlees(Request $request)
  {
      
-    $no=Takhlees::count();
-    $seri=$no+1;
+    $no=SerialNumber::firstOrFail();
+            $seri=$no->serialNo+1;
      $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
 
         Takhlees::create([
@@ -514,7 +532,12 @@ public function intarnalCars()
             'updated_by' => Auth::user()->name
         ]);
 
-       return redirect()->route('letters/'.'5')
+        SerialNumber::where('id', $no->id)->update([
+            'serialNo' => $no->serialNo+1,
+            'voucherNo' => $no->voucherNo+1,
+       ] );
+
+       return redirect()->route('letters', 5) 
             ->with('success_message','لقد تمت عملية تخليص السيارة  بنجاح');
 
  }
@@ -534,14 +557,15 @@ public function intarnalCars()
         $attachment = '/storage/app/uploads/' . $filePath;
     
     }
-    $no=Alerts::count();
-    $seri=$no+1;
+    $no=SerialNumber::firstOrFail();
+    $seri=$no->serialNo+1;
      $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
 
     Alerts::create([
         'serialNo' => $serialNo,
         'title'=>$request->title,
         'desc' => $request->desc,
+        'signature' =>Auth::user()->name,
        // 'attachment'=>$attachment,
         'emp_id'=>$request->emp_id
     ]);
@@ -549,8 +573,11 @@ public function intarnalCars()
        'alerts' => true,       
         'updated_by' => Auth::user()->name
     ]);
-  
-    return redirect()->route('letters/'.'6')
+
+    SerialNumber::where('id', $no->id)->update([
+        'serialNo' => $no->serialNo+1,
+   ] );
+    return redirect()->route('letters', 4) 
         ->with('success_message','لقد تمت عملية البلاغ عن  السيارة المخالفة بنجاح');
  }
 

@@ -109,7 +109,7 @@
 												<th>{{ trans('emportcars.entryDate') }}</th>
 												<th>{{ trans('emportcars.exitDate') }}</th>
 												<th>{{ trans('emportcars.status_value') }}</th>
-                                                <th class="border-bottom-0">العمليات</th>
+                                               <!-- <th class="border-bottom-0">العمليات</th>-->
 											</tr>
 										</thead>
 										<tbody >
@@ -119,7 +119,7 @@
                                 <tr>
                             <td>{{ $i }}</td>
 							<td>
-							<a href="{{ route('emportcars.show', $emportcars->car->customer_id ) }}">	
+							<a href="{{ route('emportcars.show', $emportcars->id ) }}">	
 									{{ optional($emportcars->customer)->name }}
 									</a>
 
@@ -128,7 +128,7 @@
 						   <td>{{ $emportcars->entryDate }}</td>
                            <td>{{ $emportcars->exitDate }}</td>
 							<td>{{ $emportcars->status_value }}</td>
-                                    
+                                    <?php /*
 									<td>
 									<a class="btn btn-info" data-effect="effect-scale"   title=" ترحيل السيارة"
 												        data-toggle="modal" href="#modaldemo6"
@@ -181,6 +181,7 @@
 										</a>
                              	       <?php } ?>
                                     </td>
+									*/ ?>
                                 </tr>
                             @endforeach
 							</tbody>	

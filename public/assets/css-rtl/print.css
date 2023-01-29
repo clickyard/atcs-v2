@@ -1,5 +1,10 @@
 
-    #print_Button , #save_Button , #title ,#example1_paginate,#example1_filter,#example1_length,#example1_info,
+    .dark-theme .mybadingtable {
+      width: 100% !important;
+
+    }
+   
+   #print_Button , #save_Button , #title ,#example1_paginate,#example1_filter,#example1_length,#example1_info,
     .opra,table.dataTable thead .sorting::after, table.dataTable thead .sorting_asc::after {
         display: none;
     }
@@ -22,4 +27,6 @@
     td .noborder {
       border: none;
     }
+
+   
   

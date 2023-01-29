@@ -81,7 +81,7 @@
 
 							<div class="card-header pb-0 ">
 								<div  class="d-flex justify-content-between mg-t-20">
-									<h4 class="right">التاريخ: {{ $processes->entryDate }}</h4>
+									<h4 class="right">التاريخ: {{ date('Y-m-d',strtotime($processes->created_at)) }}</h4>
 									<h4 class="left">{{ $processes->serialNo }}</h4>
 
 								</div>
@@ -137,9 +137,140 @@
 					</div>          
                 </div>
 	@endif
-       
-	<!-- end model12 -->
+   <!--- start new model -->
+<!-- end model12 -->
+@if($type==4)
+                <div class="modal-body body2">
+				  <div class="row row-sm">
+					<div class="col-lg-12 col-md-12" id="print">
+						<div class="card  pd-50" >
+						<img src="{{URL::asset('assets/img/atcsheader.jpg')}}"  width="100%"/> 
 
+							<div class="card-header pb-0">
+								<div  class="d-flex justify-content-between">
+								   <h4 class="right">التاريخ: {{ date('Y-m-d',strtotime($processes->created_at)) }}</h4>
+									<h4 class="left">{{ $processes->serialNo }}</h4>
+
+								</div>
+								
+								<div>
+									<h2 class="text-center mg-b-50" style=" text-decoration: underline; text-decoration-skip-ink: none ">
+									 خطاب بلاغ عن مخالفة عربة  </h2>
+									<h3 class="mg-b-30" > معنون للسيد / مدير ادارة مكافحة التهريب 
+										<span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  المحترم</span>
+									</h3>
+									
+								</div>
+							</div>
+							
+							<div class="card-body">
+								<table class="table mg-b-50 text-md-nowrap ">
+								    <tr> <td>أسم صاحب العربة : </td>  <td >{{  $emportcar->customer->name }}</td> 
+									     <td>رقم الجواز : </td> <td >{{ $emportcar->customer->passport }}</td> </tr>
+									<tr> 
+										<td>العنوان بالسودان : </td> <td >{{ $emportcar->customer->State->name }}- {{$emportcar->customer->city}}</td> 
+										<td>تاريخ دخول المركبة : </td> <td >{{ $emportcar->entryDate }}</td> </tr>
+									<tr> 
+										<td>ماركة المركبة : </td>  <td >{{ $emportcar->car->CarMark->name }}</td>
+									     <td> موديل المركبة:</td>  <td >{{ $emportcar->car->year }}</td> </tr>
+									<tr>
+										 <td> رقم الهيكل : </td> <td > {{ $emportcar->car->chassisNo }}</td> 
+									    <td> رقم اللوحة:  </td> <td >{{ $emportcar->car->plateNo }}</td></tr>
+									<tr> <td> رقم الدفتر: </td> <td > {{ $emportcar->carnetNo }} </td>	</tr>
+									
+								</table>
+								<h5>
+								عنوان البلاغ : {{  $processes->title }}
+								</h5>
+								<p>الموضوع: <br/>
+									{{  $processes->desc }} </p>
+								
+								<h5>ملحوظة : اي كشط او تعديل يلغي هذا البلاغ </h5>
+								
+								<div  class="d-flex justify-content-between  mg-b-50 mg-t-50">	
+								
+									<h5 class="right">	ختم الشركة :  <img src="{{URL::asset('assets/img/sigin.png') }} "  width="120" /></h5> </td>
+								
+									<h5 class="left"> التوقيع : {{  $processes->signature }}</h5>
+										
+								</div>
+								
+								
+									
+									
+								
+							</div>
+						</div>
+					</div>
+					</div>          
+                </div>
+           
+	<!-- end model13 -->
+@endif
+	<!-- end model12 -->
+	@if($type==2)
+                <div class="modal-body body2">
+				  <div class="row row-sm">
+					<div class="col-lg-12 col-md-12" id="print">
+						<div class="card  pd-50" >
+						<img src="{{URL::asset('assets/img/atcsheader.jpg')}}"  width="100%"/> 
+
+							<div class="card-header pb-0">
+								<div  class="d-flex justify-content-between">
+								   <h4 class="right">التاريخ: {{ date('Y-m-d',strtotime($processes->created_at)) }}</h4>
+									<h4 class="left">{{ $processes->serialNo }}</h4>
+
+								</div>
+								
+								<div>
+									<h2 class="text-center mg-b-50" style=" text-decoration: underline; text-decoration-skip-ink: none ">
+									 خطاب تمديد مغادرة  </h2>
+									<h3 class="mg-b-50" > معنون للسيد / مدير ادارة مكافحة التهريب 
+										<span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  المحترم</span>
+									</h3>
+									
+								</div>
+							</div>
+							
+							<div class="card-body">
+								<table class="table mg-b-50 text-md-nowrap ">
+								    <tr> <td>أسم صاحب العربة : </td>  <td >{{  $emportcar->customer->name }}</td> </tr>
+									<tr> <td>رقم الجواز : </td> <td >{{ $emportcar->customer->passport }}</td> </tr>
+									<tr> <td>العنوان بالسودان : </td> <td >{{ $emportcar->customer->State->name }}- {{$emportcar->customer->city}}</td> </tr>
+									<td>تاريخ دخول المركبة : </td> <td >{{ $emportcar->entryDate }}</td> </tr>
+									<tr> <td>ماركة المركبة : </td>  <td >{{ $emportcar->car->CarMark->name }}</td> </tr>
+									<tr> <td> موديل المركبة:</td>  <td >{{ $emportcar->car->year }}</td> </tr>
+									<tr> <td> رقم الهيكل : </td> <td > {{ $emportcar->car->chassisNo }}</td> </tr>
+									<tr> <td> رقم اللوحة:  </td> <td >{{ $emportcar->car->plateNo }}</td></tr>
+									<tr> <td> رقم الدفتر: </td> <td > {{ $emportcar->carnetNo }} </td>	</tr>
+									
+								</table>
+								<h5>
+									التوصية :- لا مانع لدينا من التجديد لفترة  شهر  واحد حتى تسطيع المركبة مغادرة البلاد وفق النظام المعمول به.
+								</h5>
+								<h5>ملحوظة : اي كشط او تعديل يلغي هذا الأورنيك </h5>
+								
+								<div  class="d-flex justify-content-between  mg-b-50 mg-t-50">	
+								
+									<h5 class="right">	ختم الشركة :  <img src="{{URL::asset('assets/img/sigin.png') }} "  width="120" /></h5> </td>
+								
+									<h5 class="left"> التوقيع : {{  $processes->signature }}</h5>
+										
+								</div>
+								
+								
+									
+									
+									<p> 	 ايصال استلام رسوم  رقم:  ( {{ $processes->voucher }} )</p>
+								
+							</div>
+						</div>
+					</div>
+					</div>          
+                </div>
+           
+	<!-- end model13 -->
+@endif
 
 <!-- star model13 -->
 @if($type==3)
@@ -147,10 +278,11 @@
 				  <div class="row row-sm">
 					<div class="col-lg-12 col-md-12" id="print">
 						<div class="card  pd-50" >
+						<img src="{{URL::asset('assets/img/atcsheader.jpg')}}"  width="100%"/> 
 
 							<div class="card-header pb-0">
 								<div  class="d-flex justify-content-between">
-								   <h4 class="right">التاريخ: {{ $processes->entrydate }}</h4>
+								   <h4 class="right">التاريخ: {{ date('Y-m-d',strtotime($processes->created_at)) }}</h4>
 									<h4 class="left">{{ $processes->serialNo }}</h4>
 
 								</div>
@@ -190,10 +322,11 @@
 									<h5 class="left"> التوقيع : {{  $processes->signature }}</h5>
 										
 								</div>
-
+								
+								
 									
 									
-									<p> 	 ايصال استلام رسوم الموانئ رقم:  ( {{ $processes->voucher }} )</p>
+									<p> 	 ايصال استلام رسوم  رقم:  ( {{ $processes->voucher }} )</p>
 								
 							</div>
 						</div>
@@ -205,14 +338,14 @@
 @endif
 
 <!-- star model14 -->
-@if($type==4)
+@if($type==6)
                 <div class="modal-body body3">
 				  <div class="row row-sm">
 				  <div class="col-lg-12 col-md-12" id="print">
 						<div class="card  pd-50" >
 							<div class="card-header pb-0">
 								<div  class="d-flex justify-content-between mg-b-50 ">
-								    <h4 class="right">التاريخ: {{ $processes->entrydate }}</h4>
+								    <h4 class="right">التاريخ:{{ date('Y-m-d',strtotime($processes->created_at)) }}</h4>
 									<h4 class="left">{{ $processes->serialNo }}</h4>
 								</div>
 								

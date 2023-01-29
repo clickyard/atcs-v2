@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('leavingcars_files', function (Blueprint $table) {
+        Schema::create('alerts', function (Blueprint $table) {
             $table->id();
             $table->string('serialNo', 50); 
-            $table->date('exitDate'); 
-            $table->text('leaving_file')->nullable();   
-            $table->text('insurance_file')->nullable(); 
+            $table->string('title', 100); 
+            $table->text('desc')->nullable(); 
+            $table->text('attachment')->nullable(); 
+            $table->string('signature',200); 
             $table->bigInteger( 'emp_id' )->unsigned();
             $table->foreign('emp_id')->references('id')->on('emportcars')->onDelete('cascade');
             $table->timestamps();
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leavingcars_files');
+        Schema::dropIfExists('alerts');
     }
 };

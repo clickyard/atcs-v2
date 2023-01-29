@@ -8,6 +8,7 @@ use App\Models\Intarnal_files;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use App\Models\SerialNumber;
 
 class IntarnalFilesController extends Controller
 {
@@ -69,8 +70,17 @@ class IntarnalFilesController extends Controller
             }
 
           //  $data->save();
-            
+          $no=SerialNumber::firstOrFail();
+          $seri=$no->serialNo+1;
+           $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
+           $data['serialNo']=$serialNo;
+
             Intarnal_files::create($data);
+
+
+            SerialNumber::where('id', $no->id)->update([
+                'serialNo' => $no->serialNo+1,
+           ] );
 
             $data_emp['status'] = 1;
             $data_emp['status_value'] = 'بالداخل';
@@ -194,7 +204,7 @@ class IntarnalFilesController extends Controller
     {
         $rules = [
             'emp_id' => 'required',
-            'serialNo' => 'required|string|min:1',
+          //  'serialNo' => 'required|string|min:1',
             'entryDate' => 'required',
            // 'expiryDuration' => 'required|string|min:1|max:255',
             'exitDate' => 'required',

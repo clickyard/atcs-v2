@@ -92,12 +92,13 @@
 								</div>
 							</div>
 							<div class="card-body" id="print">
-							<h3 class="card-title mg-b-0">التاريخ: {{date('d-m-Y')}}</h3>
+							<img src="{{URL::asset('assets/img/onerHeader.png') }} "  width="100%" class="mg-b-30"/>
+						<!--	<h3 class="card-title mg-b-0">التاريخ: {{date('d-m-Y')}}</h3>
 
 							<div>
 								<h3 class="text-center" style=" text-decoration: underline; text-decoration-skip-ink: none ">بيانات صاحب عربة الإفراج المؤقت </h3>
 	                      			<br/>
-							</div>
+							</div>-->
 								<div class="table-responsive">
 									<table class="table table-bordered table-hover mg-b-0 text-md-nowrap">
 										<thead>
