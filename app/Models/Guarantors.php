@@ -79,7 +79,7 @@ class Guarantors extends Model
      */
     public function Customer()
     {
-        return $this->belongsTo('App\Models\Customers','cus_id','id');
+        return $this->belongsTo('App\Models\Customers','customer_id','id');
     }
 
     /**

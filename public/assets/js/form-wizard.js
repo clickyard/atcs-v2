@@ -4,10 +4,11 @@ $(function() {
 		headerTag: 'h3',
 		bodyTag: 'section',
 		autoFocus: true,
-	//	labels: {next:"بعد",previous:"قبل",finish: "النهاية"},
+		labels: {next:"بعد",previous:"قبل",finish: "النهاية"},
 		titleTemplate: '<span class="number">#index#<\/span> <span class="title">#title#<\/span>', 
 		onFinished: function (event, currentIndex) {
 			var form = $(this);
+
 			// Submit form input
 			form.submit();
 		},
@@ -16,38 +17,35 @@ $(function() {
 		headerTag: 'h3',
 		bodyTag: 'section',
 		autoFocus: true,
-	//	labels: {next:"بعد",previous:"قبل",finish: "النهاية"},
+		labels: {next:"بعد",previous:"قبل",finish: "النهاية"},
 		titleTemplate: '<span class="number">#index#<\/span> <span class="title">#title#<\/span>',
 		onStepChanging: function(event, currentIndex, newIndex) {
 			if (currentIndex < newIndex) {
 				// Step 1 form validation
 				if (currentIndex === 0) {
-					
+
 					var name = $('#name').parsley();
-					var nationality = $('#nationality').parsley();
 					var nationalityNo = $('#nationalityNo').parsley();
 					var passport = $('#passport').parsley();
 					var residenceNo = $('#residenceNo').parsley();
 					var passportDate = $('#passportDate').parsley();				
 					var residenceDate = $('#residenceDate').parsley();
-					var entryDate = $('#entryDate').parsley();
-					var exitDate = $('#exitDate').parsley();
-					if (name.isValid() && nationality.isValid() &&
-					 nationalityNo.isValid() && passport.isValid() &&
-					 passportDate.isValid() &&  residenceNo.isValid() &&
-					 residenceDate.isValid()&&  entryDate.isValid() && exitDate.isValid()
+					if (name.isValid()
+							&& nationalityNo.isValid() 
+							&& passport.isValid() 
+							&& passportDate.isValid() 
+							&& residenceNo.isValid() 
+							&& residenceDate.isValid()
 					 ) {
 						return true;
 					} else {
 						name.validate();
-						nationality.validate();
 						nationalityNo.validate();
 						passport.validate();
 						passportDate.validate();
 						residenceNo.validate();
 						residenceDate.validate();
-						entryDate.validate();
-						exitDate .validate();
+					
 					}
 				}
 				// Step 2 form validation

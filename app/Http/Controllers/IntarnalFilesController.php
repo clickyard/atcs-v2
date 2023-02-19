@@ -56,7 +56,8 @@ class IntarnalFilesController extends Controller
       //  try {
             
             $data = $this->getData($request);
-
+            $data_emp=$this->getempData($request);
+           
             if($request->file()){
                 $file= $request->file('file_name');
                 $filename=$request->serialNo.'_'.date('YmdHi');
@@ -68,29 +69,25 @@ class IntarnalFilesController extends Controller
                 $data['file_name']= $newName;
                //return   $data['file_path']; 
             }
+            $newdate=date('Y-m-d', strtotime($request->entryDate. ' + 3 months'));
 
           //  $data->save();
-          $no=SerialNumber::firstOrFail();
-          $seri=$no->serialNo+1;
-           $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
-           $data['serialNo']=$serialNo;
-
-            Intarnal_files::create($data);
+           $data['exitDate']=$newdate;
 
 
-            SerialNumber::where('id', $no->id)->update([
-                'serialNo' => $no->serialNo+1,
-           ] );
+           $data_emp['status'] = 1;
+           $data_emp['status_value'] = 'بالداخل';
+           $data_emp['exitDate'] = $newdate;  
+           $data_emp['updated_by'] = Auth::user()->name;  
 
-            $data_emp['status'] = 1;
-            $data_emp['status_value'] = 'بالداخل';
-            $data_emp['entryDate'] = $request->entryDate;  
-            $data_emp['exitDate'] = $request->exitDate;  
-            $data_emp['updated_by'] = Auth::user()->name;      
-          Emportcars::where('id',$request->emp_id)->update($data_emp); 
+            if($data && $data_emp){
+                Intarnal_files::create($data);
+            
+                Emportcars::where('id',$request->emp_id)->update($data_emp); 
+           }
        // return  $data;
 
-            return redirect()->route('process')
+            return redirect()->route('intarnals')
                 ->with('success_message', trans('intarnal_files.model_was_added'));
       //  }
         // catch (Exception $exception) {
@@ -204,12 +201,9 @@ class IntarnalFilesController extends Controller
     {
         $rules = [
             'emp_id' => 'required',
-          //  'serialNo' => 'required|string|min:1',
+            'serialNo' => 'required|string|min:1',
             'entryDate' => 'required',
-           // 'expiryDuration' => 'required|string|min:1|max:255',
-            'exitDate' => 'required',
             'file_name' => 'required',
-          // 'file_path' => 'required|string|min:1|max:255', 
         ];
 
         
@@ -219,6 +213,24 @@ class IntarnalFilesController extends Controller
 
 
         return $data;
+    }
+
+    public function getempData(Request $request){
+        $rules = [
+            'entryDate' => 'required',
+            'portAccess_id' => 'required|string|min:1',
+            'ship_id' => 'required',
+            'shippingAgent' => 'required|string|min:1|max:255',
+            'deliveryPerNo' => 'required',
+        ];
+
+        
+        $data = $request->validate($rules);
+
+
+
+
+        return $data;  
     }
 
 }

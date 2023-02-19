@@ -334,7 +334,8 @@
 
 @media print {
   .app-sidebar {
-    display: none; } }
+   /* display: none;*/
+   } }
 
 @media (max-width: 767px) {
   .app-sidebar__overlay {
@@ -427,7 +428,7 @@ slide is-expanded side-menu__item {
   -ms-flex-align: center;
   align-items: center;
   padding: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   -webkit-transition: border-left-color 0.3s ease, background-color 0.3s ease;
   -o-transition: border-left-color 0.3s ease, background-color 0.3s ease;
@@ -460,7 +461,7 @@ slide is-expanded side-menu__item {
     color: rgba(255, 255, 255, 0.8);
     opacity: 1;
     background: transparent;
-    font-size: 12px;
+    font-size: 18px;
     box-shadow: none; } }
 
 .slide:hover .side-menu__label, .slide:hover .angle, .slide:hover .side-menu__icon {
@@ -538,7 +539,7 @@ slide is-expanded side-menu__item {
   white-space: nowrap;
   color: #5b6e88;
   position: relative;
-  font-size: 13.5px;
+  font-size: 18px;
   line-height: 1;
   vertical-align: middle;
   font-weight: 400; }
@@ -553,7 +554,7 @@ slide is-expanded side-menu__item {
 
 .app-sidebar .side-item.side-item-category {
   color: #2c364c;
-  font-size: 14px;
+  font-size: 18px;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: .5px;
@@ -587,7 +588,7 @@ slide is-expanded side-menu__item {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  font-size: 13px;
+  font-size: 18px;
   height: 32px;
   padding: 0 56px 0 0;
   font-weight: 400;
@@ -893,7 +894,7 @@ slide is-expanded side-menu__item {
   margin-right: 0 !important; }
 
 .side-menu h3 {
-  font-size: 11px;
+  font-size: 18px;
   font-weight: 400;
   letter-spacing: 1px;
   opacity: 1;
@@ -926,7 +927,7 @@ slide is-expanded side-menu__item {
   -ms-flex-align: center;
   align-items: center;
   padding: 7px 0;
-  font-size: 14px; }
+  font-size: 18px; }
 
 .sub-side-menu__label {
   white-space: nowrap;

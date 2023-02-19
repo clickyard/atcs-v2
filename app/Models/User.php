@@ -22,13 +22,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+   // protected $guarded = [];
     protected $fillable = [
         'name',
+        'username',
+
         'email',
         'password',
-		'roles_name',
-		'Status'
+        'country',
+        'tel',
+        'address',
+        'Status',
+        'roles_name'
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,7 +54,7 @@ class User extends Authenticatable
      */
    protected $casts = [
 'email_verified_at' => 'datetime',
-'roles_name' => 'array',
+//'roles_name' => 'array',
 
 ];
 public function guardName(){

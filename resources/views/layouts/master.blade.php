@@ -10,11 +10,11 @@
 		@include('layouts.head')
 	</head>
 
-	<body class="main-body app sidebar-mini  dark-theme">
+	<body class="main-body app sidebar-mini  ">
 		<!-- Loader -->
-		<div id="global-loader">
+		<!--<div id="global-loader">
 			<img src="{{URL::asset('assets/img/loader.svg')}}" class="loader-img" alt="Loader">
-		</div>
+		</div>-->
 		<!-- /Loader -->
 		@include('layouts.main-sidebar')		
 		<!-- main-content -->

@@ -10044,6 +10044,7 @@ textarea.form-control.is-invalid, textarea.form-control.parsley-error {
     display: block;
     width: 100%;
     overflow-x: auto;
+    overflow-y:visible;
     -webkit-overflow-scrolling: touch;
   }
   .table-responsive-xl > .table-bordered {
@@ -10055,6 +10056,7 @@ textarea.form-control.is-invalid, textarea.form-control.parsley-error {
   display: block;
   width: 100%;
   overflow-x: auto;
+  overflow-y:visible;
   -webkit-overflow-scrolling: touch;
 }
 

@@ -63,7 +63,7 @@
                             @foreach ($data as $key => $user)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
                                         @if ($user->Status == 'مفعل')
@@ -90,12 +90,10 @@
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-info"
                                                 title="تعديل"><i class="las la-pen"></i></a>
                                        
-                                         @if($user->name != "superAdmin")
                                             <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
                                                 data-user_id="{{ $user->id }}" data-username="{{ $user->name }}"
                                                 data-toggle="modal" href="#modaldemo8" title="حذف"><i
                                                     class="las la-trash"></i></a>
-                                          @endif          
                                       
                                     </td>
                                 </tr>

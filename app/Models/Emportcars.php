@@ -60,7 +60,7 @@ class Emportcars extends Model
         return $this->belongsTo('App\Models\Cars',
                                         'car_id',                                        
                                         'id'
-    )->with('Vehicle');
+    )->with('Vehicle','CarMark'); 
     }
 
     
@@ -74,9 +74,9 @@ class Emportcars extends Model
     public function customer()
     {
         return $this->belongsToThrough('App\Models\Customers'::class,
-                                        'App\Models\Cars'::class,
+                                        'App\Models\Cars'::class
                                                                        
-                                     )->with('custrefrance.State','guarantor');
+                                     )->with('custrefrance.State');
     }
 
 
@@ -112,7 +112,14 @@ class Emportcars extends Model
     {
         return $this->hasOne('App\Models\Alerts','emp_id','id');
     }
-
+    public function myincreases()
+    {
+        return $this->hasmany('App\Models\Increases','emp_id','id');
+    }
+    public function myleavingcars()
+    {
+        return $this->hasOne('App\Models\Leavingcars','emp_id','id');
+    }
     /**
      * Get the creator for this model.
      *

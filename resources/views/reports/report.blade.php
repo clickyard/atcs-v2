@@ -65,49 +65,90 @@
 
                     <div class="row">
 
+                    <div class="col-lg-3">
+                        <label for="inputName" class="control-label">التقرير بواسطة حالة المركبة</label>
+                        <select name="type" id="type" onchange="this.form.submit()" class="form-control select2"  >
+                                <option value="0" {{ $Search['type'] ==0  ? 'selected':"";  }}disabled >من فضلك اختر </option>
+
+                                <option value="1"  {{ $Search['type'] ==1  ? 'selected':"";  }} > الكل</option>
+                                <option value="2"  {{ $Search['type'] ==2  ? 'selected':"";  }} > المركبات الواصلة</option>
+                                <option value="3"  {{ $Search['type'] ==3  ? 'selected':"";  }} > المركبات بالداخل</option>
+
+                                <option value="4"  {{ $Search['type'] ==4  ? 'selected':"";  }} >المركبات المغادرة</option>
+                                <option value="5"  {{ $Search['type'] ==5  ?  'selected':""; }}> مركبات تم ترحيلها</option>
+                                <option value="7"  {{ $Search['type'] ==7  ?  'selected':""; }}>  مركبات تم تمديدها </option>
+                                <option value="8"  {{ $Search['type'] ==8  ?  'selected':""; }}>  مركبات تم تخليصها </option>
+                                <option value="9"  {{ $Search['type'] ==9  ?  'selected':""; }}>  مركبات متخلفة عن المغادرة </option>
+                                <option value="6"  {{ $Search['type'] ==6  ?  'selected':""; }}> المركبات المخالفة </option>
+
+                        </select>
+                            </div>
+
+                            <div class="col-lg-3" id="start_at">
+                                <label for="exampleFormControlSelect1">من تاريخ</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                    </div><input class="form-control fc-datepicker" value="{{ $Search['start_at'] ?? '' }}"
+                                        name="start_at" placeholder="YYYY-MM-DD" type="text">
+                                </div><!-- input-group -->
+                            </div>
+
+                            <div class="col-lg-3" id="end_at">
+                                <label for="exampleFormControlSelect1">الي تاريخ</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                    </div><input class="form-control fc-datepicker" onchange="this.form.submit()" name="end_at"
+                                        value="{{ $Search['end_at'] ?? '' }}" placeholder="YYYY-MM-DD" type="text">
+                                </div><!-- input-group -->
+                            </div>
+                            </div>    
+                 </form>
+                 
+<hr/>
+                
+
+<form action="{{ route('Search_isueDate') }}" method="POST" role="search" autocomplete="off">
+                    {{ csrf_field() }}
+<div class="row">
+
                         <div class="col-lg-3">
-                            <label for="inputName" class="control-label">التقرير عن</label>
-                            <select name="type" id="type" onchange="this.form.submit()" class="form-control select2"  >
-                                    <option value="1"  {{ $Search['type'] ==1  ? 'selected':"";  }} > الكل</option>
-									<option value="2"  {{ $Search['type'] ==2  ? 'selected':"";  }} > المركبات الواصلة</option>
-                                    <option value="3"  {{ $Search['type'] ==3  ? 'selected':"";  }} > المركبات بالداخل</option>
-
-									<option value="4"  {{ $Search['type'] ==4  ? 'selected':"";  }} >المركبات المغادرة</option>
-									<option value="5"  {{ $Search['type'] ==5  ?  'selected':""; }}> مركبات تم ترحيلها</option>
-									<option value="6"  {{ $Search['type'] ==6  ?  'selected':""; }}> المركبات المخالفة </option>
-									<option value="7"  {{ $Search['type'] ==7  ?  'selected':""; }}>  مركبات تم تمديدها </option>
-									<option value="8"  {{ $Search['type'] ==8  ?  'selected':""; }}>  مركبات تم تخليصها </option>
-
-                            </select>
+                            <label for="inputName" class="control-label">التقرير بواسطة تاريخ اصدار الدفتر</label>
+                           <br/> من فضلك اختر التاريخ 
                         </div>
 
-                        <div class="col-lg-3" id="start_at">
+                        <div class="col-lg-3" id="entary_at">
                             <label for="exampleFormControlSelect1">من تاريخ</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <i class="fas fa-calendar-alt"></i>
                                     </div>
-                                </div><input class="form-control fc-datepicker" value="{{ $Search['start_at'] ?? '' }}"
-                                    name="start_at" placeholder="YYYY-MM-DD" type="text">
+                                </div><input class="form-control fc-datepicker" value="{{ $Search['entary_at'] ?? '' }}"
+                                    name="entary_at" placeholder="YYYY-MM-DD" type="text">
                             </div><!-- input-group -->
                         </div>
 
-                        <div class="col-lg-3" id="end_at">
+                        <div class="col-lg-3" id="exit_at">
                             <label for="exampleFormControlSelect1">الي تاريخ</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
                                         <i class="fas fa-calendar-alt"></i>
                                     </div>
-                                </div><input class="form-control fc-datepicker" onchange="this.form.submit()" name="end_at"
-                                    value="{{ $Search['end_at'] ?? '' }}" placeholder="YYYY-MM-DD" type="text">
+                                </div><input class="form-control fc-datepicker" onchange="this.form.submit()" name="exit_at"
+                                    value="{{ $Search['exit_at'] ?? '' }}" placeholder="YYYY-MM-DD" type="text">
                             </div><!-- input-group -->
                         </div>
-                    </div>
-
-                    
-                </form>
+                </div>
+     </form>   
+     
+     
 						<div class="card  mg-t-20 mg-b-20">
 						
 						<div class="card-body" id="print">
@@ -127,14 +168,14 @@
 									<table id="example1" class="table key-buttons text-md-nowrap">
 										<thead>
 											<tr>
-											  <tr>
-												<th class="border-bottom-0">#</th>
-												<th>{{ trans('emportcars.cus_id') }}</th>
-                                               <th>{{ trans('emportcars.carnetNo') }}</th>
-                                                <th>  {{ trans('cars.chassisNo') }}</th>
-                                                <th>{{ trans('emportcars.entryDate') }}</th>
-												<th>{{ trans('emportcars.exitDate') }}</th>
-												<th>الحالة</th>
+                                                <th class="border-bottom-0">#</th>                                             
+                                                <th>رقم الدفتر</th>
+                                                <th>تاريخ الدفتر</th>
+												<th>اسم المالك</th>
+                                                <th> نوع المركبة</th>
+                                                <th>رقم الشاسي</th>
+                                                <th>تاريخ الدخول</th>
+												<th>ارقام الهواتف</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -143,12 +184,22 @@
                                 <?php $i++; ?>
                                 <tr>
                                     <td>{{ $i }}</td>
+                                    <td>{{ $emportcars->carnetNo }}</td>
+									<td>{{ $emportcars->issueDate }}</td>
 									<td>{{ optional($emportcars->customer)->name }}</td>        
-									<td>{{ $emportcars->carnetNo }}</td>
-								    <td>{{ optional($emportcars->car)->chassisNo }}</td>
+                                    <td>
+                                            {{ $emportcars->car->Vehicle->name}} 
+                                            {{ $emportcars->car->CarMark->name }}
+                                            {{ $emportcars->car->year }}
+                                    </td>
+                                    <td> {{ optional($emportcars->car)->chassisNo }} </td>
+
 									<td>{{ $emportcars->entryDate }}</td>
-									<td>{{ $emportcars->exitDate }}</td>
-									<td>{{ $emportcars->status_value }}     </td>    
+                                    <td>
+                                        {{ optional($emportcars->customer)->tel}} </br> 
+                                        {{optional($emportcars->customer)->tel2}}
+                                    </td>        
+
 						        </tr>
                             @endforeach
 										</tbody>

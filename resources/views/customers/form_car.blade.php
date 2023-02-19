@@ -113,7 +113,7 @@
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('issueDate') ? 'has-error' : '' }}">
             <label for="issueDate" class=" control-label">{{ trans('emportcars.issueDate') }}</label>
             <div class="">
-                <input class="form-control  " name="issueDate" type="date" id="issueDate" value="{{ old('issueDate', optional($customers)->issueDate) }}" required="true" placeholder="{{ trans('emportcars.issueDate__placeholder') }}">
+                <input class="form-control fc-datepicker " name="issueDate" type="text" id="issueDate" value="{{ old('issueDate', optional($customers)->issueDate) }}" required="true" placeholder="{{ trans('emportcars.issueDate__placeholder') }}">
                 {!! $errors->first('issueDate', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
@@ -139,6 +139,7 @@
                 {!! $errors->first('destination', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+      @if(Auth::user()->hasAnyRole(['superAdmin','admin','employee']))		
 
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('portAccess_id') ? 'has-error' : '' }}">
             <label for="portAccess_id" class="control-label">{{ trans('emportcars.portAccess_id') }}</label>
@@ -155,6 +156,7 @@
                 {!! $errors->first('portAccess_id', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+       
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('ship_id') ? 'has-error' : '' }}">
             <label for="ship_id" class="control-label">{{ trans('emportcars.ship_id') }}</label>
             <div class="">
@@ -186,16 +188,17 @@
                 {!! $errors->first('deliveryPerNo', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
-
+@endif
        
 
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('expiryDate') ? 'has-error' : '' }}">
             <label for="expiryDate" class=" control-label">{{ trans('emportcars.expiryDate') }}</label>
             <div class="">
-                <input class="form-control " name="expiryDate" type="date" id="expiryDate" value="{{ old('expiryDate', optional($customers)->expiryDate) }}"  placeholder="{{ trans('emportcars.expiryDate__placeholder') }}">
+                <input class="form-control fc-datepicker" name="expiryDate" type="text" id="expiryDate" readonly value="{{ old('expiryDate', optional($customers)->expiryDate) }}"  placeholder="{{ trans('emportcars.expiryDate__placeholder') }}">
                 {!! $errors->first('expiryDate', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+      
 
 
 

@@ -7,7 +7,7 @@
     th, td {
       color: #37374e;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 14px;
       letter-spacing: .5px;
       text-transform: uppercase;
       border-bottom-width: 1px;
@@ -384,7 +384,8 @@
   .table-responsive-xl {
     display: block;
     width: 100%;
-    overflow-x: auto;
+    overflow-x: visible;
+    overflow-y:visible;
     -webkit-overflow-scrolling: touch;
 
     > .table-bordered {
@@ -396,7 +397,9 @@
 .table-responsive {
   display: block;
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
+  overflow-y:visible;
+
   -webkit-overflow-scrolling: touch;
 
   > .table-bordered {

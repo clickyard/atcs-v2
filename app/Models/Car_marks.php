@@ -12,6 +12,6 @@ class Car_marks extends Model
 
     public function vehicle()
     {
-    return $this->belongsTo('App\Models\vehicles', 'veh_id', 'id');
+    return $this->belongsTo('App\Models\Vehicles', 'veh_id', 'id');
     }
 }

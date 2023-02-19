@@ -206,8 +206,8 @@
 										    	<td>  العنوان: {{ optional($customers->customer)->city }}</td>	
 											</tr>
 											<tr>
-												<td > جوال 1 : {{ optional($customers->customer)->city }}</td>
-												<td > جوال 2 : {{ optional($customers->customer)->city }}</td>
+												<td > جوال 1 : {{ optional($customers->customer)->tel }}</td>
+												<td > جوال 2 : {{ optional($customers->customer)->tel2 }}</td>
 											</tr>
 											<tr>
 										        <td>واتساب السودان : {{ optional($customers->customer)->whatsup }} </td>

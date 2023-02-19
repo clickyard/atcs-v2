@@ -155,7 +155,8 @@
 								
 								<div>
 									<h2 class="text-center mg-b-50" style=" text-decoration: underline; text-decoration-skip-ink: none ">
-									 خطاب بلاغ عن مخالفة عربة  </h2>
+									 خطاب بلاغ عن مخالفة عربة 
+									 </h2>
 									<h3 class="mg-b-30" > معنون للسيد / مدير ادارة مكافحة التهريب 
 										<span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  المحترم</span>
 									</h3>
@@ -224,7 +225,9 @@
 								
 								<div>
 									<h2 class="text-center mg-b-50" style=" text-decoration: underline; text-decoration-skip-ink: none ">
-									 خطاب تمديد مغادرة  </h2>
+									 مغادرة عربة الافراج المؤقت
+
+									</h2>
 									<h3 class="mg-b-50" > معنون للسيد / مدير ادارة مكافحة التهريب 
 										<span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  المحترم</span>
 									</h3>
@@ -246,7 +249,9 @@
 									
 								</table>
 								<h5>
-									التوصية :- لا مانع لدينا من التجديد لفترة  شهر  واحد حتى تسطيع المركبة مغادرة البلاد وفق النظام المعمول به.
+								
+									نوصي بالمغادرة فورا من البلاد
+
 								</h5>
 								<h5>ملحوظة : اي كشط او تعديل يلغي هذا الأورنيك </h5>
 								
@@ -261,7 +266,7 @@
 								
 									
 									
-									<p> 	 ايصال استلام رسوم  رقم:  ( {{ $processes->voucher }} )</p>
+									<p> 	 ايصال استلام   رقم:  ( {{ $processes->voucher }} )</p>
 								
 							</div>
 						</div>
@@ -289,7 +294,13 @@
 								
 								<div>
 									<h2 class="text-center mg-b-50" style=" text-decoration: underline; text-decoration-skip-ink: none ">
-									 تمديد دفاتر المرور الجمركي</h2>
+									
+									@if($processes->status==1)
+									تمديد دفاتر المرور الجمركي
+									@else
+									خطاب تمديد مغادرة 
+									@endif
+									</h2>
 									<h3 class="mg-b-50" > معنون للسيد / مدير ادارة مكافحة التهريب 
 										<span >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  المحترم</span>
 									</h3>
@@ -311,7 +322,11 @@
 									
 								</table>
 								<h5>
+								@if($processes->status==1)
 									التوصية :- لا مانع لدينا من التجديد لفترة ثلاثة شهور أخرى وفق النظام المعمول به.
+								@else
+								التوصية :- لا مانع لدينا من التجديد لفترة  شهر  واحد حتى تسطيع المركبة مغادرة البلاد وفق النظام المعمول به.
+								 @endif
 								</h5>
 								<h5>ملحوظة : اي كشط او تعديل يلغي هذا الأورنيك </h5>
 								
@@ -433,13 +448,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
+<!--<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/pdfmake.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/vfs_fonts.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.html5.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.print.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>-->
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
@@ -458,4 +473,4 @@
 	
 
  </script>
-@endsection
+ @endsection

@@ -41,7 +41,7 @@
 					@if(optional($customers)->takhlees==1) <p> لا يوجد إجراءت هذه السيارة تم تخليصها</p> @endif
 					@if(optional($customers)->status==2) <p> لا يوجد إجراءت هذه السيارة تمت مغادرتها </p> @endif
 					
-					@if($customers->allow_increase == 1 && $customers->status != 0 && $customers->status != 2 && $customers->takhlees==0 )	
+					@if($customers->allow_increase == 1 && $customers->status != 0 )	
 						
 						<div class="col-lg-2">
 							<label class="rdiobox"><input name="type" value="2"  type="radio"  > <span>  تمديد</span></label>
@@ -74,6 +74,7 @@
 <div  id="form1"  style="display:none;">
 	    <form method="POST" action="{{ route('intarnal_files.store') }}"  enctype="multipart/form-data" accept-charset="UTF-8" autocomplete="off" class="form-horizontal">
           	{{ csrf_field() }}
+			  @method('post')
 			إذن دخول بيانات افراج جمركي
 			<div class="row mg-t-20 ">
 			        <input type="hidden" name="emp_id"  value="{{$customers->id}}" />
@@ -88,7 +89,7 @@
 					<div class="col-lg-4">
 								<label for="start_date" class=" control-label">  تاريخ الخروج</label>
 								<div class="">
-									<input class="form-control fc-datepicker" id="exitDate" name="exitDate" data-date-format="yy-mm-dd"  value=""  >
+									<input class="form-control fc-datepicker" readonly id="exitDate" name="exitDate" data-date-format="yy-mm-dd"  value=""  >
 							   </div>
 					</div>
 					
@@ -114,27 +115,26 @@
           	{{ csrf_field() }}
  التمديد لفترة اخرى
     <div class="row mg-t-20 ">
-	<?php
+	<?php  
+			$exDate= $customers->exitDate;
+
 			$dura=  $customers->duration + 3;
-			if($dura == 3 ){
+			if($dura == 6){
 				$status=1;
-				$status_value=" اولى";
-				$allow=true;
-			}else if($dura == 6 ){
+				$status_value="تمديد اول";
+				$end_date = date('Y-m-d', strtotime("+3 months", strtotime($exDate))); 
+
+			}else{
 				$status=2;
-				$status_value=" ثانية";
-				$allow=true;
-			}else if($dura == 9 ){
-				$status=3;
-				$status_value=" ثالثة";
-				$allow=false;
+				$status_value=" تمديد مغادرة";
+				$end_date = date('Y-m-d', strtotime("+1 months", strtotime($exDate))); 
+
 			}
 ?>
+      
 	            <input type="hidden" name="emp_id"  value="{{$customers->id}}" />
 				<input type="hidden" name="cus_id"  value="{{$customers->id}}" />
 
-				<input type="hidden" name="dura" value="{{$dura}}" />
-				<input type="hidden" name="allow"  value="{{$allow}}">  
 				<input type="hidden" name="status"  value="{{$status}}">  
 				<input type="hidden" name="entryDate"  value="{{$customers->entryDate}}"> 
 			    
@@ -145,7 +145,7 @@
 					            </div>
 					</div>
 				<div class="col-lg-3">
-								<label for="start_date" class=" control-label">  التمديد لفترة </label>
+								<label for="start_date" class=" control-label">  نوع التمديد  </label>
 								<div class="">
 									<input class="form-control" name="status_value" type="text" value="{{$status_value}}"  readonly>
 							</div>
@@ -158,8 +158,7 @@
 					</div>-->
 					 
 					<div class="col-lg-3">
-						         <?php      $exDate= $customers->exitDate;
-											$end_date = date('Y-m-d', strtotime("+3 months", strtotime($exDate))); ?>
+						         
 								<label for="start_date" class=" control-label">  التمديد لتاريخ </label>
 								<div class="">
 									<input class="form-control" name="end_date" type="text" value="{{$end_date}}"  readonly>

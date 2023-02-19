@@ -171,70 +171,15 @@ public function Search_process(Request $request)
     }
     */
 }
-public function markibat( Request $request)
-{
-    // $Date=date('Y-m-d'); 
-    //  $newdate=date('Y-m-d', strtotime($Date. ' - 15 days'));
+////////////////////////////////////////////////////////////////////////////////////
+public function beforeintarnalCars(){
+    $Ships = Ships::all();
+    $Shippingports = Shippingports::all();
+    $intarnalCars= Emportcars::where('status', 0  )->with('customer','car')->get();
+    return view('processes.beforeintarnalCars', compact('intarnalCars','Ships','Shippingports'));
 
-    
-    //  return $newdate;
-    $processes=array();
-    $title="";
-    $type =$request->type;
-
-  //return $type;
-
-   switch ($type) {
-
-            case 1:
-                $title="مركبات واصلة";
-                $processes=Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status', 0  )->get();
-              //  return json_encode($processes);
-                return view('processes.markibat', compact('processes','type','title'));
-
-            break;
-            case 2:
-                $title=" مركبات بالداخل";
-
-                $processes = Emportcars::with(['Customer','Car'])->where('status', 1  )->get();
-                //return json_encode($data);
-                return view('processes.markibat', compact('processes','type','title'));
-                break; 
-            case 3:
-                $title="مركبات بالداخل ومتبقي المدة لها اقل من 15يوم";
-
-                $processes = Emportcars::with(['customer','Car'])->where('status', 2  )->get();
-                //return json_encode($processes);
-                return view('processes.markibat', compact('processes','type','title'));
-                break;
-            case 4:
-                $title="مركبات متخلفة عن المغادرة ";
-
-                $processes = Emportcars::with(['customer','Car'])->where('status', 3 )->get();
-                //return $processes;
-                return view('processes.markibat', compact('processes','type','title'));
-                 break;  
-          
-            default:
-                //  return $processes;
-                return view('processes.markibat', compact('processes','type','title'));
-  
-    }
 }
-    public function beforeintarnalCars()
-    {
-        // $Date=date('Y-m-d'); 
-        //  $newdate=date('Y-m-d', strtotime($Date. ' - 15 days'));
-
-        $processes = array();
-        
-        //  return $newdate;
-        $type ="";
-        $title="";
-    
-      
-        return view('processes.markibat', compact('processes','type','title'));
-    }
+  
 ////////////////////////////////////////////////////////////////////////////////////
 
 public function afterintarnalCars()
@@ -277,6 +222,7 @@ public function intarnalCars()
         }
 
  ////////////////////////////////////////////////////////////////////////////////////
+
  public function notLeaving()
  {
     // $d=date('d')-15; 
@@ -376,13 +322,27 @@ public function intarnalCars()
              
             }*/
             $no=SerialNumber::firstOrFail();
-            $seri=$no->serialNo+1;
+            $count = Increases::count();
+            $seri=$count+1;
              $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
+             if($request->status ==1){ 
+                 $status=1;
+                 $status_value="تمديد اول";
+                 $allow=1;
+                 $dura=6;
+             }else {
+                $status=2;
+                $status_value="تمديد مغادرة";
+                $allow=0;
+                $dura=7;
+             }
              Increases::create([
                 'serialNo' => $serialNo,
                 'voucher' => $no->voucherNo+1,
                 'entryDate'=>$request->entryDate,
                 'exitDate'=>$request->end_date,
+                'status' => $status,
+                'status_value' =>$status_value,
                 'signature' =>Auth::user()->name,
                 'emp_id'=>$request->emp_id
             ]);
@@ -391,8 +351,8 @@ public function intarnalCars()
                 'status' => 1,
                 'status_value' => 'بالداخل ',
                 'increase'=>1,
-                'allow_increase' => $request->allow ,
-                'duration' =>$request->dura,
+                'allow_increase' => $allow ,
+                'duration' =>$dura,
                 'exitDate'=>$request->end_date,
                 'updated_by' => Auth::user()->name
             ]);
@@ -474,7 +434,8 @@ public function intarnalCars()
              
             }*/
             $no=SerialNumber::firstOrFail();
-            $seri=$no->serialNo+1;
+            $count = Leavingcars::count();
+            $seri=$count+1;
              $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
              Leavingcars::create([
                 'serialNo' => $serialNo,
@@ -490,6 +451,7 @@ public function intarnalCars()
             Emportcars::where('id', $request->emp_id)->update([
                 'status' => 2,
                 'status_value' => 'غادرت',
+                'allow_increase'=>0,
                 'updated_by' =>Auth::user()->name,
             ]);
 
@@ -508,7 +470,8 @@ public function intarnalCars()
  {
      
     $no=SerialNumber::firstOrFail();
-            $seri=$no->serialNo+1;
+    $count = Takhlees::count();
+    $seri=$count+1;
      $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
 
         Takhlees::create([
@@ -522,6 +485,7 @@ public function intarnalCars()
             'takhlees' => true,
             'status' =>5,
             'status_value' => 'تم تخليصها',
+            'allow_increase'=>0,
             'updated_by' => Auth::user()->name
         ]);
         $amount = Amounts::firstOrFail();
@@ -558,7 +522,8 @@ public function intarnalCars()
     
     }
     $no=SerialNumber::firstOrFail();
-    $seri=$no->serialNo+1;
+    $count = Alerts::count();
+    $seri=$count+1;
      $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
 
     Alerts::create([
@@ -584,7 +549,27 @@ public function intarnalCars()
 
 
 
+///////////////////////////////////////////////////////////////////////////
 
+public function SearchLetters(Request $request){
+ 
+    $emp_id=$request->carnet;
+    $emportcar= Emportcars::where('carnetNo',$request->carnet)
+    ->with(['customer','car','mytakhlees','myincreases','myleavingcars','myalerts'])
+    ->firstOrFail();
+
+    return view('processes.ShowLetters', compact('emportcar'));
+
+}
+///////////////////////////////////////////////////////////////////////////
+
+public function ShowLetters(){
+
+    $emportcar=array();
+
+    return view('processes.ShowLetters', compact('emportcar'));
+
+}
 
 
 

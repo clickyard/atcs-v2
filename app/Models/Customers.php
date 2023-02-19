@@ -58,7 +58,7 @@ class Customers extends Model
      */
     public function Country()
     {
-        return $this->belongsTo('App\Models\countries','country_id','id');
+        return $this->belongsTo('App\Models\Countries','country_id','id');
     }
 
     /**
@@ -78,7 +78,7 @@ class Customers extends Model
      */
     public function creator()
     {
-        return $this->belongsTo('App\Users','created_by');
+        return $this->belongsTo('App\Models\User','created_by');
     }
 
     /**
@@ -88,7 +88,7 @@ class Customers extends Model
      */
     public function updater()
     {
-        return $this->belongsTo('App\Users','updated_by');
+        return $this->belongsTo('App\Models\User','updated_by');
     }
 
     /**
@@ -108,7 +108,7 @@ class Customers extends Model
      */
     public function custrefrance()
     {
-        return $this->hasmany('App\Models\Custrefrances','cus_id','id');
+        return $this->hasmany('App\Models\Custrefrances','customer_id','id');
     }
 
     /**
@@ -137,7 +137,7 @@ class Customers extends Model
      */
     public function guarantor()
     {
-        return $this->hasOne('App\Models\Guarantors','cus_id');
+        return $this->hasOne('App\Models\Guarantors','customer_id','id');
     }
 
     

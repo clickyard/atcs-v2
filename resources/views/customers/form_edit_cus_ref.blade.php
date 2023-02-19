@@ -3,14 +3,15 @@
 <p class="mg-b-20">عنوان اقرب الأقربين {{ $i+1}}</p>
 
 <div class="row row-sm col-md-9 col-lg-12">
-
+  <input  name="addMore[{{ $i }}][ref_id]" type="hidden" value="{{$customers->custrefrance[$i]->id }}" minlength="1" maxlength="400" required="true" placeholder="{{ trans('custrefrances.cname__placeholder') }}">
+  
             <div class="col-md-5 col-lg-4  form-group   {{ $errors->has('cname') ? 'has-error' : '' }}">
             <label for="cname" class="control-label">{{ trans('custrefrances.cname') }}</label>
             <div class="">
                 <input class="form-control" name="addMore[{{ $i }}][cname] " type="text" id="cname" value="{{ old('cname', optional($customers->custrefrance[$i])->cname) }}" minlength="1" maxlength="400" required="true" placeholder="{{ trans('custrefrances.cname__placeholder') }}">
                 {!! $errors->first('cname', '<p class="help-block">:message</p>') !!}
             </div>
-            </div>
+            </div> 
 
 
 

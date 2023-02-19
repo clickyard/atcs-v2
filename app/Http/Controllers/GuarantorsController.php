@@ -95,7 +95,7 @@ $Customers = Customer::pluck('name','id')->all();
      */
     public function edit($id)
     {
-        $guar_id= Guarantors::where('cus_id',$id)->first()->id;
+        $guar_id= Guarantors::where('customer_id',$id)->first()->id;
      // $guarantors = Guarantors::where('cus_id',$id)->get();
 
         $guarantors = Guarantors::findOrFail($guar_id);
@@ -122,6 +122,12 @@ $Customers = Customer::pluck('name','id')->all();
             $guarantors = Guarantors::findOrFail($id);
             $guarantors->update($data);
 
+           
+           
+            if(Auth::user()->hasrole('extoffice'))   
+            return redirect()->route('intarnals')
+                ->with('success_message', trans('customers.model_was_updated'));
+        else 
             return redirect()->route('customers.index')
                 ->with('success_message', trans('guarantors.model_was_updated'));
         } catch (Exception $exception) {

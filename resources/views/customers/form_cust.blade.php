@@ -49,26 +49,67 @@
 	<div class="col-md-5 col-lg-4 form-group {{ $errors->has('residenceDate') ? 'has-error' : '' }}">
 		<label for="residenceDate" class=" control-label">{{ trans('customers.residenceDate') }}</label>
 		<div class="">
-			<input class="form-control" name="residenceDate" type="date" id="residenceDate" value="{{ old('residenceDate', optional($customers)->residenceDate) }}" required="true" placeholder="{{ trans('customers.residenceDate__placeholder') }}">
+			<input class="form-control fc-datepicker" name="residenceDate" type="text" id="residenceDate" value="{{ old('residenceDate', optional($customers)->residenceDate) }}" required="true" placeholder="{{ trans('customers.residenceDate__placeholder') }}">
 			{!! $errors->first('residenceDate', '<p class="help-block">:message</p>') !!}
 		</div>
 	</div>
+	@if(Auth::user()->hasAnyRole(['superAdmin','admin','employee']))		
+
 		<div class="col-md-5 col-lg-4 form-group {{ $errors->has('entryDate') ? 'has-error' : '' }}">
 			<label for="entryDate" class=" control-label">{{ trans('emportcars.entryDate') }}</label>
 			<div class="">
-				<input class="form-control " name="entryDate" type="date" id="entryDate" value="{{ old('entryDate', optional($customers)->entryDate) }}" required="true" placeholder="{{ trans('emportcars.entryDate__placeholder') }}">
+
+			<input class="form-control fc-datepicker" name="entryDate"  id="entryDate" value="{{ old('entryDate', optional($customers)->entryDate) }}"  placeholder="{{ trans('emportcars.entryDate__placeholder') }}">
+				
 				{!! $errors->first('entryDate', '<p class="help-block">:message</p>') !!}
 			</div>
 		</div>
 		<div class="col-md-5 col-lg-4 form-group {{ $errors->has('exitDate') ? 'has-error' : '' }}">
 			<label for="exitDate" class=" control-label">{{ trans('emportcars.exitDate') }}</label>
 			<div class="">
-				<input class="form-control" name="exitDate" type="date" id="exitDate" value="{{ old('exitDate', optional($customers)->exitDate) }}" required="true" placeholder="{{ trans('emportcars.exitDate__placeholder') }}">
+				<input class="form-control fc-datepicker" name="exitDate" type="text" id="exitDate" readonly value="{{ old('exitDate', optional($customers)->exitDate) }}"  placeholder="{{ trans('emportcars.exitDate__placeholder') }}">
 				{!! $errors->first('exitDate', '<p class="help-block">:message</p>') !!}
 			</div>
 		</div>
+	@endif
 </div>
 
 
+<script>
+    
+ 
+      $(document).ready(function() {
+		var date = $('.fc-datepicker').datepicker({
+        dateFormat: 'yy-mm-dd'
+        }).val();
 
+		$('#entryDate').on('change', function() {
 
+                var dateTypeVar = $('#entryDate').datepicker('getDate');
+			//	alert(dateTypeVar);
+
+                var entryd= $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+                $('#entryDate').val(entryd);
+
+                var newDate = moment(entryd, "YYYY-MM-DD").add(3, 'months').format('YYYY-MM-DD');
+
+                $('#exitDate').val(newDate);
+
+		});
+
+		$('#issueDate').on('change', function() {
+
+                var dateTypeVar = $('#issueDate').datepicker('getDate');
+                var isued= $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+                $('#issueDate').val(isued);
+            
+                var newDate = moment(isued, "YYYY-MM-DD").add(12, 'months').format('YYYY-MM-DD');
+                $('#expiryDate').val(newDate);
+
+		});
+		//////////////////////////////////////////////////
+		//$('#addCustomer').validator('validate');
+
+    })
+    
+    </script>

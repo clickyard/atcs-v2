@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-السيارات بالداخل - لوحة التحكم
+السيارات الواصلة - لوحة التحكم
 
 @endsection
 
@@ -81,11 +81,13 @@
 												<th class="border-bottom-0">#</th>
 												<th>{{ trans('emportcars.cus_id') }}</th>
                                                <th>{{ trans('emportcars.carnetNo') }}</th>
+											   <th >تاريخ اصدار الدفتر</th>
                                                 <th>  {{ trans('cars.chassisNo') }}</th>
-                                                <th>{{ trans('emportcars.entryDate') }}</th>
-												<th>{{ trans('emportcars.exitDate') }}</th>
-												<th>{{ trans('emportcars.status_value') }}</th>
+												<th class="border-bottom-0">عرض البيانات</th>
+												<th class="border-bottom-0">التعديل</th>
+
                                                 <th class="border-bottom-0">العمليات</th>
+
 											</tr>
 										</thead>
 										<tbody>
@@ -95,28 +97,83 @@
                                 <tr>
                             <td>{{ $i }}</td>
 							<td>
-							<a href="{{ route('emportcars.show', $emportcars->cus_id ) }}">	
-									{{ optional($emportcars->Customer)->name }}
+							<a href="{{ route('emportcars.show', $emportcars->id ) }}">	
+									{{ optional($emportcars->customer)->name }}
 								</a>
 							</td>        
 							<td>{{ $emportcars->carnetNo }}</td>
-                           <td>{{ optional($emportcars->Customer->Car)->chassisNo }}</td>
-                            <td>{{ $emportcars->entryDate }}</td>
-							<td>{{ $emportcars->exitDate }}</td>
-							<td>{{ $emportcars->status_value }}</td>
-                                    <td>
+							<td>{{ $emportcars->issueDate }} </td>
+                           <td>{{ optional($emportcars->car)->chassisNo }}</td>
+						   
+								<td>
+							   <div class="dropdown">
+									<button aria-expanded="false" aria-haspopup="true"
+										class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+										type="button">عرض البيانات  <i class="fas fa-caret-down ml-1"></i></button>
+									<div class="dropdown-menu tx-14">
+									<a class="dropdown-item" href="{{ route('customers.show',$emportcars->id) }}" >
+												<i class="text-primary fas fa-eye"></i>&nbsp;&nbsp;
+												جميع التفاصيل
+											</a>
+											
+											<a class="dropdown-item" href="{{ route('reports.show',$emportcars->id) }}" >
+												<i class="text-info fas fa-eye"></i>&nbsp;&nbsp;
+													بيانات صاحب العربة
+											</a>		
+
+											<a class="dropdown-item" href="{{route('carReport', $emportcars->id) }}">
+												<i class=" text-success fas fa-eye"></i>&nbsp;&nbsp; 
+													بيانات العربة 
+												</a>
+
+											<a class="dropdown-item" href="{{ route('luggagesReport', $emportcars->id) }}" >
+												<i class="text-warning fas fa-eye"></i>&nbsp;&nbsp;
+												كشف عفش
+											</a>
+							   </div>
+							</div>
+							</td> 
+                                  
+									<td>
+									
+									<div class="dropdown" style="overflow: visible;">
+									<button aria-expanded="false" aria-haspopup="true"
+										class="btn ripple btn-success btn-sm" data-toggle="dropdown"
+										type="button">تعديل البيانات  <i class="fas fa-caret-down ml-1"></i></button>
+									<div class="dropdown-menu tx-14" style="overflow: visible;">
+											
+											<a class="dropdown-item" href="{{ route('customers.edit',$emportcars->car->customer_id) }}" >
+												<i class="text-info fas fa-pen"></i>&nbsp;&nbsp;
+													 تعديل بيانات العميل
+											</a>
+											<a class="dropdown-item" href="{{ route('emportcars.edit',$emportcars->id) }}" >
+												<i class="text-primary fas fa-pen"></i>&nbsp;&nbsp;
+													 تعديل بيانات الدفتر
+											</a>
+											<a class="dropdown-item" href="{{ route('cars.edit',$emportcars->car->id) }}" >
+												<i class="text-warning fas fa-pen"></i>&nbsp;&nbsp;
+													 تعديل بيانات العربة
+											</a>
+											<a class="dropdown-item" href="{{ route('guarantors.edit',$emportcars->car->customer_id) }}" >
+												<i class="text-success fas fa-pen"></i>&nbsp;&nbsp;
+													 تعديل بيانات الكفيل
+											</a>
+												
+								</div> </td>
+								<td>
 									<a class="btn btn-info" data-effect="effect-scale"  
 												        data-toggle="modal" href="#modaldemo6"
 														data-emp_id="{{ $emportcars->id }}" 
 														data-carnetNo="{{ $emportcars->carnetNo }}" 
 														data-destination="{{ $emportcars->destination }}" 	
-														data-name="{{ optional($emportcars->Customer)->name}}"
-														data-chassisNo="{{ optional($emportcars->Customer->Car)->chassisNo }}"
+														data-name="{{ optional($emportcars->customer)->name}}"
+														data-chassisNo="{{ optional($emportcars->car)->chassisNo }}"
 														><i class="fas fa-pen"></i>&nbsp;&nbsp;
 														أذن دخول												</a>
                              	  
-                                    </td>
+                                   
 									
+									</td>
                                 </tr>
                             @endforeach
 										</tbody>
@@ -168,7 +225,7 @@
 									<div class="form-group {{ $errors->has('serialNo') ? 'has-error' : '' }}">
 										<label for="serialNo" class="control-label">{{ trans('intarnal_files.serialNo') }}</label>
 										<div class="">
-											<input class="form-control" name="serialNo" type="text" id="serialNo" value="<?php /*{{ old('serialNo', optional($intarnalFiles)->serialNo) }}*/?>" minlength="1" maxlength="10" required="true" placeholder="{{ trans('intarnal_files.serialNo__placeholder') }}">
+											<input class="form-control" name="serialNo" type="text" id="serialNo" value="" minlength="1" maxlength="10" required  placeholder="{{ trans('intarnal_files.serialNo__placeholder') }}">
 											{!! $errors->first('serialNo', '<p class="help-block">:message</p>') !!}
 										</div>
 									</div>
@@ -178,7 +235,7 @@
 									<div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
 										<label for="date" class=" control-label">{{ trans('intarnal_files.date') }}</label>
 										<div class="">
-											<input class="form-control" name="date" type="date" id="date" value="<?php /*{{ /*old('date', optional($intarnalFiles)->date)  }}*/?>" minlength="1" maxlength="10" required="true" placeholder="{{ trans('intarnal_files.date__placeholder') }}">
+											<input class="form-control" name="entryDate" type="date" id="date" value="" minlength="1" maxlength="10" required="true" placeholder="{{ trans('intarnal_files.date__placeholder') }}">
 											{!! $errors->first('date', '<p class="help-block">:message</p>') !!}
 										</div>
 									</div>
@@ -187,24 +244,54 @@
 
 						<div class="row">
 							<div class="col-md-6">
-									<div class="form-group {{ $errors->has('expiryDuration') ? 'has-error' : '' }}">
-										<label for="expiryDuration" class="control-label">{{ trans('intarnal_files.expiryDuration') }}</label>
-										<div class="">
-											<input class="form-control" name="expiryDuration" type="text" id="expiryDuration" value="<?php /*{{ old('expiryDuration', optional($intarnalFiles)->expiryDuration) }}*/?>" minlength="1" maxlength="10" required="true" placeholder="{{ trans('intarnal_files.expiryDuration__placeholder') }}">
-											{!! $errors->first('expiryDuration', '<p class="help-block">:message</p>') !!}
-										</div>
-									</div>
-						     </div>
-							<div class="col-md-6">
 
-									<div class="form-group {{ $errors->has('exitDate') ? 'has-error' : '' }}">
-										<label for="exitDate" class=" control-label">{{ trans('intarnal_files.exitDate') }}</label>
-										<div class="">
-											<input class="form-control" name="exitDate" type="date" id="date" value="<?php /*{{ /*old('exitDate', optional($intarnalFiles)->exitDate)  }}*/?>" minlength="1" maxlength="10" required="true" placeholder="{{ trans('intarnal_files.exitDate__placeholder') }}">
-											{!! $errors->first('exitDate', '<p class="help-block">:message</p>') !!}
-										</div>
+									<label for="portAccess_id" class="control-label">{{ trans('emportcars.portAccess_id') }}</label>
+									<div class="col">
+										<select class="form-control" id="portAccess_id" name="portAccess_id" required="true">
+												<option value="" >{{ trans('emportcars.portAccess_id__placeholder') }}</option>
+											@foreach ($Shippingports as $key =>  $Shippingport)
+												<option value="{{ $Shippingport->id }}" >
+													{{ $Shippingport->name  }}
+												</option>
+											@endforeach
+										</select>
+										
+										{!! $errors->first('portAccess_id', '<p class="help-block">:message</p>') !!}
 									</div>
 						     </div>
+				
+							    <div class="col-md-6">
+
+									<label for="ship_id" class="control-label">{{ trans('emportcars.ship_id') }}</label>
+									<div class="">
+										<select class="form-control" id="ship_id" name="ship_id" required="true">
+												<option value="" >{{ trans('emportcars.ship_id__placeholder') }}</option>
+											@foreach ($Ships as $key => $Ship)
+												<option value="{{ $Ship->id }}"  >
+													{{ $Ship->name  }}
+												</option>
+											@endforeach
+										</select>
+										
+										{!! $errors->first('ship_id', '<p class="help-block">:message</p>') !!}
+									</div>
+							    </div>
+								<div class="col-md-6">
+
+										<label for="shippingAgent" class="control-label">{{ trans('emportcars.shippingAgent') }}</label>
+										<div class="">
+											<input class="form-control" name="shippingAgent" type="text" id="shippingAgent" value="" min="1" max="100"  placeholder="{{ trans('emportcars.shippingAgent__placeholder') }}">
+											{!! $errors->first('shippingAgent', '<p class="help-block">:message</p>') !!}
+										</div>
+								 </div>
+								 <div class="col-md-6">
+
+										 <label for="deliveryPerNo" class=" control-label">{{ trans('emportcars.deliveryPerNo') }}</label>
+										<div class="">
+											<input class="form-control" name="deliveryPerNo" type="text" id="deliveryPerNo" value="" minlength="1"  placeholder="{{ trans('emportcars.deliveryPerNo__placeholder') }}">
+											{!! $errors->first('deliveryPerNo', '<p class="help-block">:message</p>') !!}
+										</div>
+								 </div>
 						</div>
 					
 
@@ -255,18 +342,11 @@
 <!-- Internal Data tables -->
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
+
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/pdfmake.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/vfs_fonts.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.html5.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.print.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
+
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
@@ -276,11 +356,11 @@
 <script src="{{URL::asset('assets/plugins/fileuploads/js/fileupload.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/fileuploads/js/file-upload.js')}}"></script>
 <!--Internal Fancy uploader js-->
-<script src="{{URL::asset('assets/plugins/fancyuploder/jquery.ui.widget.js')}}"></script>
+<!--<script src="{{URL::asset('assets/plugins/fancyuploder/jquery.ui.widget.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/fancyuploder/jquery.fileupload.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/fancyuploder/jquery.iframe-transport.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/fancyuploder/jquery.fancy-fileupload.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/fancyuploder/fancy-uploader.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/fancyuploder/fancy-uploader.js')}}"></script>-->
 <script>
 $('#modaldemo6').on('show.bs.modal', function(event) {
 	        var emp_id = $(event.relatedTarget).attr('data-emp_id');

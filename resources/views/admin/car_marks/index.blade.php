@@ -4,6 +4,7 @@
 
 @endsection
 @section('css')
+<?php /*
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet">
@@ -11,6 +12,9 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+*/?>
+<link href="{{ asset('css/plugin.css') }}" rel="stylesheet">
+
 @endsection
 @section('page-header') 
 				<!-- breadcrumb -->
@@ -255,6 +259,9 @@
 @endsection
 @section('js')
 <!-- Internal Data tables -->
+<script src="{{ asset('js/plugin.js') }}" defer></script>
+
+<?php /*
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
@@ -274,7 +281,7 @@
 <!--Internal  Datatable js -->
 <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
 <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
-
+*/ ?>
 <script>
     $('#exampleModal2').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget)

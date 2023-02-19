@@ -28,11 +28,11 @@
             </div>
             <div>
                 <label class="tx-13">طلبات اصدار الدفتر</label>
-                <h5>563,275</h5>
+                <h5>000,000</h5>
             </div>
             <div>
                 <label class="tx-13">طلبات الرخص</label>
-                <h5>783,675</h5>
+                <h5>000,000</h5>
             </div>
         </div>
     </div>
@@ -45,33 +45,11 @@
     $count_all= $emp->allcars;
     ?>
     <div class="row row-sm">
-        <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
-            <div class="card overflow-hidden sales-card bg-primary-gradient">
-                <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
-                    <div class="">
-                        <h6 class="mb-3 tx-12 text-white"> جميع عربات الافراج المؤقت</h6>
-                    </div>
-                    <div class="pb-0 mt-0">
-                        <div class="d-flex">
-                            <div class="">
-                                <h4 class="tx-20 font-weight-bold mb-1 text-white">
-									{{ $emp->allcars}} سيارة
-                                </h4>
-                                <p class="mb-0 tx-12 text-white op-7">{{ $emp->allcars}}</p>
-                            </div>
-                            <span class="float-right my-auto mr-auto">
-                                <i class="fas fa-arrow-circle-up text-white"></i>
-                                <span class="text-white op-7"><?php  $temp=$emp->allcars=='0' ? 0 : '100%';
-                                                      echo $temp ; ?>
-                              </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      
-        <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
+    <?php  $user = Auth::user(); ?>
+
+    @if($user->hasAnyRole(['superAdmin','admin','employee','extoffice','agent']))
+
+    <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
             <div class="card overflow-hidden sales-card bg-secondary">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                     <div class="">
@@ -111,6 +89,37 @@
                 </div>
             </div>
         </div>
+@endif
+
+
+    @if($user->hasAnyRole(['superAdmin','admin','employee']))
+        <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
+            <div class="card overflow-hidden sales-card bg-primary-gradient">
+                <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
+                    <div class="">
+                        <h6 class="mb-3 tx-12 text-white"> جميع عربات الافراج المؤقت</h6>
+                    </div>
+                    <div class="pb-0 mt-0">
+                        <div class="d-flex">
+                            <div class="">
+                                <h4 class="tx-20 font-weight-bold mb-1 text-white">
+									{{ $emp->allcars}} سيارة
+                                </h4>
+                                <p class="mb-0 tx-12 text-white op-7">{{ $emp->allcars}}</p>
+                            </div>
+                            <span class="float-right my-auto mr-auto">
+                                <i class="fas fa-arrow-circle-up text-white"></i>
+                                <span class="text-white op-7"><?php  $temp=$emp->allcars=='0' ? 0 : '100%';
+                                                      echo $temp ; ?>
+                              </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+
         <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
             <div class="card overflow-hidden sales-card bg-success-gradient">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
@@ -380,8 +389,9 @@
                 </div>
             </div>
         </div>
+    @endif
     </div>
-    */?>
+   
     <!-- row closed -->
 
     <!-- row opened -->
@@ -397,10 +407,15 @@
                 </div>
                 <div class="card-body" style="width: 70%">
                 <div class="media-body">
-                     <div class="mt-2">  <a class=""  href="{{ route('customers.create') }}"><i class="mdi mdi-plus text-primary tx-18"></i>  إضاقة سجل جديد</a></div>
+                   @if($user->hasAnyRole(['superAdmin','admin','employee','agent']))
+                     <div class="mt-2">  <a class=""  href="{{ route('customers.create') }}"><i class="mdi mdi-plus text-primary tx-18"></i>  إضاقة دفتر جديد</a></div>
+                   @endif
+                     @if($user->hasAnyRole(['superAdmin','admin','employee']))
+
                      <div class="mt-2">  <a class=""  href="#"><i class="mdi mdi-file text-danger tx-18"></i>   استخراج خطابات </a></div>
                      <div class="mt-2">  <a class=""  href="#"><i class="mdi mdi-file text-success tx-18"></i>   إصدار دفتر مرور جمركي  </a></div>
                      <div class="mt-2">  <a class=""  href="#"><i class="mdi mdi-pen text-info tx-18"></i>   إصدار رخصة قيادرة دولية  </a></div>
+                     @endif
                      <div class="mt-2">   <a class=""  href="#"><i class="bx bx-user-circle text-danger tx-18"></i>      تعديل البروفايل  </a></div>
 
                  </div>     
@@ -409,7 +424,7 @@
             </div>
         </div>
 
-
+        @if($user->hasAnyRole(['superAdmin','admin','employee']))
         <div class="col-lg-12 col-xl-7">
             <div class="card card-dashboard-map-one">
                 <label class="main-content-label">الطلبات</label>
@@ -455,6 +470,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
     <!-- row closed -->
     </div>

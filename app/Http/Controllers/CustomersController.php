@@ -39,51 +39,119 @@ class CustomersController extends Controller
      * @return Illuminate\View\View
      */
     public function index()
-    {
-      /*
+    {      $user = Auth::user();
 
-     $latestempcarts = DB::table('emportcars')
-        ->select('car_id', DB::raw('MAX(entryDate) as entryDate'))
-        ->groupBy('car_id');
-     //   return $latestempcarts;
-/*
-        $users = DB::table('users')
-        ->joinSub($latestPosts, 'latest_posts', function ($join) {
-            $join->on('users.id', '=', 'latest_posts.user_id');
-        })->get();
+        $type ='';
+       if($user->hasAnyRole(['extoffice','agent'])){
 
-        $customersObjects = DB::table('cars')
-        ->joinSub($latestempcarts, 'latestempcarts', function ($join) {
-            $join->on('cars.id', '=', 'latestempcarts.car_id');
-        })
-        ->join('customers','cars.cus_id',  '=', 'customers.id')
-        ->select('customers.id','customers.name','customers.nationalityNo', 'cars.id as car_id', 'cars.chassisNo','latestempcarts.id as emp_id','latestempcarts.carnetNo')
-        ->get();
-        */
-     //   return $customersObjects;
-/*
-
-        $customersObjects = DB::table('customers')
-            ->join('cars', 'customers.id', '=', 'cars.cus_id')
-            ->join('emportcars', 'cars.id', '=', 'emportcars.car_id')
-            ->where('emportcars.entryDate','max(emportcars.entryDate)')
-            ->select('customers.*', 'cars.id as car_id', 'cars.chassisNo', 'emportcars.id as emp_id','emportcars.carnetNo')
-            ->orderBy('emportcars.entryDate','desc')->Paginate(5);
-*/
+        $customersObjects = Emportcars::where('status','0')->with(['car:id,chassisNo,customer_id','customer:name'])
+                    ->orderBy('issueDate','desc')
+                         ->Paginate(10);
+        } else  {               
         $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
-                                        ->Paginate(10);
-       // ->orderBy('entryDate','desc');
-    //    return $customersObjects;
-        //    Emportcars::join('Cars','Emportcars.car_id','=', 'Cars.id')->max('entryDate')->select('entryDate'),
-             //   ->whereColumn('Emportcars.car_id', 'Cars.id'),
-          //  'desc'
-       // )->Paginate(5);
-
-      //  $customersObjects = Customers::with(['emportcar','car'])->orderBy('created_at', 'desc')->Paginate(5);
-    // return $customersObjects;
-        return view('customers.index', compact('customersObjects'));
+                         ->orderBy('issueDate','desc')
+                              ->Paginate(10);        
+        }
+        return view('customers.index', compact('customersObjects','type'));
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+public function markibat( Request $request)
+{
+    // $Date=date('Y-m-d'); 
+    //  $newdate=date('Y-m-d', strtotime($Date. ' - 15 days'));
 
+    $data = Emportcars::where('exitDate', '<',  date('Y-m-d')  )->where('status', 1  )->update([
+        'status' => 3,
+        'status_value' => 'متخلفة ',
+    ]);
+    
+    //  return $newdate;
+    $customersObjects=array();
+    $title="";
+    $type =$request->type;
+
+
+   switch ($type) {
+
+            case 1:
+                $title="مركبات واصلة";
+                $customersObjects=Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                                ->where('status', 0  )
+                                ->orderBy('issueDate','desc')
+                                ->Paginate(10);
+              //  return json_encode($customersObjects);
+                return view('customers.index', compact('customersObjects','type','title'));
+
+            break;
+            case 2:
+                $title=" مركبات بالداخل";
+
+                $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                        ->where('status', 1  )
+                        ->orderBy('issueDate','desc')
+                        ->Paginate(10);
+                return view('customers.index', compact('customersObjects','type','title'));
+                break; 
+            case 3:
+                $title="مركبات بالداخل ومتبقي المدة لها اقل من 15يوم";
+                $Date=date('Y-m-d'); 
+                $newdate=date('Y-m-d', strtotime($Date. ' + 15 days'));
+                $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                                    ->where('status', 1  )
+                                    ->where('exitDate', '<=',  $newdate  )
+                                    ->orderBy('issueDate','desc')
+                                    ->Paginate(10);
+                //return json_encode($customersObjects);
+                return view('customers.index', compact('customersObjects','type','title'));
+                break;
+            case 4:
+                $title="مركبات متخلفة عن المغادرة ";
+              
+                $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                                ->where('status', 3 )
+                                ->where('exitDate', '<',  date('Y-m-d') )
+                                ->Paginate(10);
+                return view('customers.index', compact('customersObjects','type','title'));
+                 break;  
+          
+           case 5:
+                    $title="مركبات غادرت";
+    
+                    $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                                    ->where('status', 2 )
+                                    ->Paginate(10);
+                    return view('customers.index', compact('customersObjects','type','title'));
+                     break;  
+          case 6:
+                    $title="مركبات تم تخليصها ";
+    
+                    $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                                    ->where('takhlees', 1)
+                                    ->Paginate(10);
+                    return view('customers.index', compact('customersObjects','type','title'));
+                        break;    
+        case 7:
+            $title="مركبات تم تمديدها ";
+
+            $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                            ->where('increase', 1 )
+                            ->Paginate(10);
+            return view('customers.index', compact('customersObjects','type','title'));
+                break; 
+    case 8:
+        $title="مركبات  مخالفة ";
+
+        $customersObjects = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])
+                        ->where('alerts', 1 )
+                        ->Paginate(10);
+        return view('customers.index', compact('customersObjects','type','title'));
+            break;                                                                     
+            default:
+                //  return $customersObjects;
+                return view('customers.index', compact('customersObjects','type','title'));
+  
+    }
+}
     /**
      * Show the form for creating a new customers.
      *
@@ -132,7 +200,7 @@ class CustomersController extends Controller
             $sd = Countries::where('code', '=',  'sd' )->orwhere('code', '=',  'SD' )->first()->id;
 
             $data = $this->getData($request);
-            $data['created_by'] = Auth::Id();
+            $data['created_by'] =Auth::user()->name;
             $data['country_id'] = $sd;
             $data['processType'] = "emp";
          
@@ -140,7 +208,7 @@ class CustomersController extends Controller
 /////////////////////////////////////////////////////////////////////////////////////
             //insert car data
             $data_car = $this->getData_car($request);
-            $data_car['created_by'] = Auth::Id();
+            $data_car['created_by'] = Auth::user()->name;
            // return  $data_car;
           
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,19 +216,19 @@ class CustomersController extends Controller
             $data_emp = $this->getData_emport($request);
             $data_emp['allow_increase']=1;
             $data_emp['increase']=0;
-            $data_emp['duration'] = 0;
+            $data_emp['duration'] =3;
             $data_emp['status'] = 0;
             $data_emp['alerts'] = 0;
             $data_emp['takhlees'] = 0;
             $data_emp['status_value'] = 'واصلة';
-            $data_emp['created_by'] = Auth::Id();           
+            $data_emp['created_by'] = Auth::user()->name;           
     
           
 /////////////////////////////////////////////////////////////////////////////////////////////
             // stor emguarantors 
 
           $data_gua = $this->getData_gua($request);
-            $data_gua['created_by'] = Auth::Id();           
+            $data_gua['created_by'] = Auth::user()->name;           
        
           //  return  $data_gua;
 ////////////////////////////////////////////////////////////////////////////////////
@@ -181,21 +249,22 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
         Customers::create($data);
         $cust_id = Customers::latest()->first()->id;
         $data_car['customer_id'] = $cust_id;
-        $data_gua['cus_id'] = $cust_id;
+        $data_gua['customer_id'] = $cust_id;
 
 
         Cars::create($data_car);
         $car_id = Cars::latest()->first()->id;
 
         $data_emp['car_id'] = $car_id;
+      
+        Emportcars::create($data_emp); 
+        $emp = Emportcars::latest()->firstOrFail();
 
-
-        Emportcars::create($data_emp);  
         Guarantors::create($data_gua); 
 
         foreach ($request->addMore as $key => $value) {
-        custrefrances::create( [
-                    'cus_id' => $cust_id,
+        Custrefrances::create( [
+                    'customer_id' => $cust_id,
                     'ccountry_id'=>$sd,
                     'cname'=>$value['cname'],
                     'cstate_id'=>$value['cstate_id'],
@@ -205,13 +274,28 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
                     'cstreet'=>$value['cstreet'],
                     'cwork_address'=>$value['cwork_address'],
                     'ctel'=>$value['ctel'],
-                    'created_by'=>Auth::Id()
+                    'created_by'=>Auth::user()->name
                 ]  );
         }
+
+       
+       
+        $amount=\App\Models\Amounts::firstOrFail();
+    
+        \App\Models\Revenues::create([
+              'carnetNo' => $emp->carnetNo,
+              'emp_id' => $emp->id,
+              'carnet' => $amount->carnet,
+              'portsudan' => 0,
+              'increase' => 0,
+              'takhlees' => 0,
+              'created_by' => Auth::user()->name
+
+          ]); 
 }
       
 
-          return redirect()->route('customers.index')
+          return redirect()->route('customers.show',$emp->id)
             ->with('success_message', trans('customers.model_was_added'));
   //      } catch (Exception $exception) {
 
@@ -229,8 +313,12 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
      */
     public function show($id)
     {
-        $customers = Customers::with('country','state','creator','updater')->findOrFail($id);
+       // $customers = Customers::with('country','state','creator','updater')->findOrFail($id);
+        $customers= Emportcars::where('id',$id)
+        ->with(['customer','car','mytakhlees','myincreases','myleavingcars','myalerts'])
+        ->firstOrFail();
 
+        //return  $customers;
         return view('customers.show', compact('customers'));
     }
 
@@ -262,14 +350,34 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
     public function update($id, Request $request)
     {
       //  try {
-            
+        $sd = Countries::where('code', '=',  'sd' )->orwhere('code', '=',  'SD' )->first()->id;
+
             $data = $this->getData($request);
             $data['updated_by'] = Auth::user()->name;
             $customers = Customers::findOrFail($id);
             $customers->update($data);
+            foreach ($request->addMore as $key => $value) {
+                Custrefrances::where('id','=',$value['ref_id'])->update( [
+                            'customer_id' => $id,
+                            'ccountry_id'=>$sd,
+                            'cname'=>$value['cname'],
+                            'cstate_id'=>$value['cstate_id'],
+                            'ccity'=>$value['ccity'],
+                            'cblock'=>$value['cblock'],
+                            'chouseNo'=>$value['chouseNo'],
+                            'cstreet'=>$value['cstreet'],
+                            'cwork_address'=>$value['cwork_address'],
+                            'ctel'=>$value['ctel'],
+                            'updated_by'=>Auth::user()->name
+                        ]  );
+                }
 
-            return redirect()->route('customers.index')
-               ->with('success_message', trans('customers.model_was_updated'));
+            if(Auth::user()->hasrole('extoffice'))   
+                return redirect()->route('intarnals')
+                    ->with('success_message', trans('customers.model_was_updated'));
+            else  
+                 return redirect()->route('customers.index')
+                    ->with('success_message', trans('customers.model_was_updated'));
         //} catch (Exception $exception) {
 
          //   return back()->withInput()
@@ -365,17 +473,17 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
     protected function getData_emport(Request $request)
     {
         $rules = [
-            'ship_id' => 'required',
+            'ship_id' => 'nullable',
             'port_id' => 'required',
-            'portAccess_id' => 'required',
+            'portAccess_id' => 'nullable',
             'carnetNo' => 'required|string|min:1',
             'destination' => 'required|string|min:1|max:100',
             'shippingAgent' => 'nullable|string|min:1|max:100',
-            'deliveryPerNo' => 'nullable|string|min:1',
+           'deliveryPerNo' => 'nullable|string|min:1',
             'issueDate' => 'nullable',
-            'expiryDate' => 'nullable|date|',
+           'expiryDate' => 'nullable|date|',
             'entryDate' => 'nullable|date',
-            'exitDate' => 'nullable|date'
+           'exitDate' => 'nullable|date'
          
         ];
 

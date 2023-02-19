@@ -27,17 +27,23 @@ use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('auth.login');
+   //return view('temp.accordion');
 } );
+Route::get('/temp', function () {
+     return view('temp.accordion');
+     //return view('temp.collapse');
+
+  } );
+
+Route::get('/login', 'App\Http\Controllers\LoginController@login')->name('login');
+
+Route::get('logouts', 'App\Http\Controllers\HomeController@logout')->name('logouts');
+Route::get('userGuid', 'App\Http\Controllers\HomeController@userGuid')->name('userGuid');
+
+
 //Auth::routes(['register' => false]);
 Auth::routes();
 
-Route::get('wizard', function () {
-     return view('order');
- });
-
- //Route::get('/wizard', fn() => view('order'));
-
-Route::get('order-confirmed', fn() => view('order-confirmed'))->name('order-confirmed');
 
 
  
@@ -46,6 +52,10 @@ Route::group(['middleware' => ['auth']], function() {
 Route::resource('roles','App\Http\Controllers\RoleController');
 Route::resource('users','App\Http\Controllers\UserController');
 });
+Route::post('updatepassword/{id}','App\Http\Controllers\UserController@updatepassword')->name('users.updatepassword');
+Route::get('profile','App\Http\Controllers\UserController@profile')->name('profile');
+
+Route::post('updateprofile/{id}','App\Http\Controllers\UserController@updateprofile')->name('users.updateprofile');
 
 Route::get('/intarnals', [ProcessesController::class, 'beforeintarnalCars'])->name('intarnals');
 
@@ -59,6 +69,12 @@ Route::get('/increase', [ProcessesController::class, 'increase'])->name('increas
 Route::post('/update_increase', [ProcessesController::class, 'update_increase'])->name('update_increase');
 Route::post('/leavingCars_update', [ProcessesController::class, 'leavingCars_update'])->name('leavingCars_update');
 Route::get('/letters/{id}', [ProcessesController::class, 'letters'])->name('letters');
+Route::get('/ShowLetters', [ProcessesController::class, 'ShowLetters'])->name('ShowLetters');
+Route::post('/SearchLetters', [ProcessesController::class, 'SearchLetters'])->name('SearchLetters');
+
+
+
+
 Route::get('/takhlees', [App\Http\Controllers\ReportsController::class, 'takhlees'])->name('takhlees');
 Route::get('/alerts', [App\Http\Controllers\ReportsController::class, 'alerts'])->name('alerts');
 Route::post('/update_takhlees', [ProcessesController::class, 'update_takhlees'])->name('update_takhlees');
@@ -68,10 +84,11 @@ Route::post('/update_alerts', [ProcessesController::class, 'update_alerts'])->na
 Route::get('/process', [ProcessesController::class, 'process'])->name('process');
 
 Route::post('/Search_process', [ProcessesController::class, 'Search_process'])->name('Search_process');
-Route::post('/markibat', [ProcessesController::class, 'markibat'])->name('markibat');
 
 Route::post('/Search_customers', [App\Http\Controllers\ReportsController::class, 'Search_customers'])->name('Search_customers');
 
+
+Route::post('/Search_isueDate', [App\Http\Controllers\ReportsController::class, 'Search_isueDate'])->name('Search_isueDate');
 
 Route::get('/customerReports', [App\Http\Controllers\ReportsController::class, 'customer'])->name('customerReport');
 Route::get('/carReport/{id}', [App\Http\Controllers\ReportsController::class, 'cars'])->name('carReport');
@@ -83,7 +100,7 @@ Route::get('/guarantor_report', [App\Http\Controllers\ReportsController::class, 
 Route::get('/revenues', [App\Http\Controllers\AmountsController::class, 'revenue'])->name('revenues');
 
 
-Route::get('/show', [App\Http\Controllers\CustomersController::class, 'index']);
+//Route::get('/show', [App\Http\Controllers\CustomersController::class, 'index']);
 
 
 Route::resource('countries', App\Http\Controllers\CountriesController::class);
@@ -97,6 +114,7 @@ Route::resource('emportcars', App\Http\Controllers\EmportcarsController::class);
 Route::resource('reports', App\Http\Controllers\ReportsController::class);
 Route::resource('amounts', App\Http\Controllers\AmountsController::class);
 
+Route::post('/markibat', [App\Http\Controllers\CustomersController::class, 'markibat'])->name('markibat');
 
 Route::resource('guarantors', App\Http\Controllers\GuarantorsController::class);
 
@@ -149,5 +167,5 @@ Route::group([
     Route::delete('/intarnal_files/{intarnalFiles}',[IntarnalFilesController::class, 'destroy'])
          ->name('intarnal_files.destroy');
 });
-*/
 
+*/

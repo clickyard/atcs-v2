@@ -1,7 +1,9 @@
 @extends('layouts.master')
 @section('css')
 <!-- Internal Nice-select css  -->
-<link href="{{URL::asset('assets/plugins/jquery-nice-select/css/nice-select.css')}}" rel="stylesheet" />
+
+<link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+
 @section('title')
 تعديل مستخدم 
 @stop
@@ -21,6 +23,12 @@
 <!-- breadcrumb -->
 @endsection
 @section('content')
+
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <!-- row -->
 <div class="row">
     <div class="col-lg-12 col-md-12">
@@ -49,70 +57,101 @@
 
                 {!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}
                 <div class="">
-
+                <?php 
+                    if(Auth::user()->roles_name=="superAdmin")
+                       $readonly="";
+                    else 
+                        $readonly="readonly";
+               ?>
                     <div class="row mg-b-20">
-                        <div class="parsley-input col-md-6" id="fnWrapper">
+                        <div class="parsley-input col-md-4" id="fnWrapper">
                             <label>اسم المستخدم: <span class="tx-danger">*</span></label>
-                        @if($user->name=="superAdmin")
-                            {!! Form::text('name', null, array('class' => 'form-control','required','readonly')) !!}
-                        @else
-                            {!! Form::text('name', null, array('class' => 'form-control','required')) !!}
-                        @endif
+                            {!! Form::text('username', null, array('class' => 'form-control','required','readonly')) !!}
+                    
                         </div>
-
-                        <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <div class="parsley-input col-md-4" id="fnWrapper">
+                            <label> الاسم بالكامل: <span class="tx-danger">*</span></label>
+                            {!! Form::text('name', null, array('class' => 'form-control','required',$readonly)) !!}
+                    
+                        </div>
+                        <div class="parsley-input col-md-4 mg-t-20 mg-md-t-0" id="">
                             <label>البريد الالكتروني: <span class="tx-danger">*</span></label>
-                            {!! Form::text('email', null, array('class' => 'form-control','required')) !!}
+                            {!! Form::text('email', null, array('class' => 'form-control','required',$readonly)) !!}
                         </div>
                     </div>
 
                 </div>
 
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <label>كلمة المرور: <span class="tx-danger">*</span></label>
-                        {!! Form::password('password', array('class' => 'form-control','required')) !!}
-                    </div>
-
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <label> تاكيد كلمة المرور: <span class="tx-danger">*</span></label>
-                        {!! Form::password('confirm-password', array('class' => 'form-control','required')) !!}
-                    </div>
-                </div>
+               
 
                 <div class="row row-sm mg-b-20">
-                    <div class="col-lg-6">
-                        <label class="form-label">حالة المستخدم</label>
-                        <select name="Status" id="select-beast" class="form-control  nice-select  custom-select">
-                            <option value="{{ $user->Status}}">{{ $user->Status}}</option>
-                            @if($user->name=="superAdmin")
-                            <option value="مفعل">مفعل</option>
-                            @else
-                            <option value="مفعل">مفعل</option>
-                            <option value="غير مفعل">غير مفعل</option>
-                            @endif
-                        </select>
-                    </div>
+                  
+           
+                        <div class="parsley-input col-md-4" id="fnWrapper">
+                            <label>الدولة :</label>
+                            {!! Form::text('country', null, array('class' => 'form-control','required',$readonly)) !!}
+                    
+                        </div>
+                        <div class="parsley-input col-md-4" id="fnWrapper">
+                            <label>العنوان : </label>
+                            {!! Form::text('address', null, array('class' => 'form-control',$readonly)) !!}
+                    
+                        </div>
+
+                        <div class="parsley-input col-md-4" id="fnWrapper">
+                            <label>رقم الهاتف : <span class="tx-danger">*</span></label>
+                            {!! Form::text('tel', null, array('class' => 'form-control',$readonly)) !!}
+                    
+                        </div>
                 </div>
 
                 <div class="row mg-b-20">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-                            <strong>نوع المستخدم</strong>
-                            @if($user->name=="superAdmin")
-                            {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control','multiple','disabled'))
-                            !!}
-                            @else
-                            {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control','multiple'))
-                            !!}
-                            @endif
-                        </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="form-label">حالة المستخدم</label>
+                        
+                       <?php $Status_value=array('مفعل'=>'مفعل','غير مفعل'=>'غير مفعل');?>
+                        {!! Form::select('Status', $Status_value,$user->Status, array('class' => 'form-control select2 ')) !!}
+
+                        
                     </div>
+                        <div class="col-lg-6">
+                            <strong>نوع المستخدم</strong>
+                           
+                            {!! Form::select('roles_name', $roles,$userRole, array('class' => 'form-control select2'))
+                            !!}
+                         
+                        </div>
                 </div>
                 <div class="mg-t-30">
-                    <button class="btn btn-main-primary pd-x-20" type="submit">تحديث</button>
+                    <button class="btn btn-success pd-x-20" type="submit">تحديث</button>
                 </div>
                 {!! Form::close() !!}
+
+
+                            <hr/>
+                            {!! Form::model($user, ['method' => 'post','route' => ['users.updatepassword', $user->id]]) !!}
+ 
+                     <div class="mg-t-30">
+                            <strong> تغيير كلمة المرور</strong>
+                            <div class="row mg-b-30">
+                                <div class="parsley-input col-md-4 mg-t-20 mg-md-t-0" id="">
+                                    <label>كلمة المرور الجديدة: <span class="tx-danger">*</span></label>
+                                    {!! Form::password('password', array('class' => 'form-control','required')) !!}
+                                </div>
+
+                                <div class="parsley-input col-md-4 mg-t-20 mg-md-t-0" id="">
+                                    <label> تاكيد كلمة المرور: <span class="tx-danger">*</span></label>
+                                    {!! Form::password('confirm-password', array('class' => 'form-control','required')) !!}
+                                </div>
+                               
+                            </div>
+                            <div class="mg-t-30">
+                                        <button class="btn btn-main-primary pd-x-20" type="submit">تحديث كلمة المرور</button>
+
+                                </div>
+                     </div>
+                {!! Form::close() !!}
+
             </div>
         </div>
     </div>
@@ -130,12 +169,6 @@
 @endsection
 @section('js')
 
-<!-- Internal Nice-select js-->
-<script src="{{URL::asset('assets/plugins/jquery-nice-select/js/jquery.nice-select.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/jquery-nice-select/js/nice-select.js')}}"></script>
+<script src="{{ URL::asset('assets/plugins/select2/js/select2.min.js') }}"></script>
 
-<!--Internal  Parsley.min js -->
-<script src="{{URL::asset('assets/plugins/parsleyjs/parsley.min.js')}}"></script>
-<!-- Internal Form-validation js -->
-<script src="{{URL::asset('assets/js/form-validation.js')}}"></script>
 @endsection

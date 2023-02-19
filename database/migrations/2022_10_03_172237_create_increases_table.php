@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('serialNo', 50); 
             $table->bigInteger('voucher'); 
             $table->date('entryDate'); 
-            $table->date('exitDate');             
+            $table->date('exitDate');  
+            $table->integer('status')->nullable();
+            $table->string('status_value', 50)->nullable();            
             $table->string('signature',200); 
             $table->bigInteger( 'emp_id' )->unsigned();
             $table->foreign('emp_id')->references('id')->on('emportcars')->onDelete('cascade');

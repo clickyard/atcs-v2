@@ -31,6 +31,24 @@ class ReportsController extends Controller
        return view('reports.details', compact('customers'));
    }
     ///////////////////////////////////////////////////////////////////////
+    
+    public function Search_isueDate(Request $request){
+      
+        $entary_at= date($request->entary_at);
+        $exit_at=date($request->exit_at);
+        $report_title=  ' تقرير بواسطة تاريخ اصدار الدفتر'.' من '.$entary_at.' الى '.$exit_at ;;
+        
+       
+            $Search=array(
+                'type'=>0,
+                'entary_at'=>$entary_at,
+                'exit_at'=>$exit_at,
+    
+             );
+       $report = Emportcars::with(['car','customer:name,tel,tel2'])->whereBetween('issueDate',[$entary_at,$exit_at])->get();
+       return view('reports.report', compact('report','report_title','Search'));
+    }
+    /////////////////////////////////////////////////////////////////////////
 public function Search_customers(Request $request){
     
 
@@ -44,19 +62,27 @@ public function Search_customers(Request $request){
          'end_at'=>date($request->end_at),
 
     );
+
+    $data = Emportcars::where('exitDate', '<',  date('Y-m-d')  )->where('status', 1  )->update([
+        'status' => 3,
+        'status_value' => 'متخلفة ',
+        ]);
+
+
+
     switch ($request->type) {
 
         case 1:
             $report_title="تقرير شامل";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
                     $report_title=" تقرير شامل من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -64,14 +90,14 @@ public function Search_customers(Request $request){
         case 2:
             $report_title="تقرير عن المركبات الواصلة";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',0)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',0)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             } else {
                     $report_title=" تقرير المركبات الواصلة من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',0)->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',0)->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -79,14 +105,14 @@ public function Search_customers(Request $request){
         case 3:
             $report_title="تقرير عن المركبات بالداخل";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',1)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',1)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
                     $report_title=" تقرير المركبات بالداخل من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',1)->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',1)->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -94,14 +120,14 @@ public function Search_customers(Request $request){
         case 4:
             $report_title="تقرير المركبات التي غادرت";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',2)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',2)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
                     $report_title=" تقرير المركبات التي غادرت من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',2)->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',2)->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -109,14 +135,14 @@ public function Search_customers(Request $request){
         case 5:
             $report_title="تقرير المركبات التي تم ترحيلها";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',4)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',4)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
                     $report_title=" تقرير المركبات التي تم ترحيلها من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('status',4)->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('status',4)->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -124,7 +150,7 @@ public function Search_customers(Request $request){
         case 6:
             $report_title="تقرير المركبات المخالفة";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('alerts',1)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('alerts',1)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
@@ -132,22 +158,23 @@ public function Search_customers(Request $request){
                     $report_title=" تقرير المركبات المخالفة من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->whereBetween('entryDate',[$start_at,$end_at])->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->whereBetween('entryDate',[$start_at,$end_at])->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
              break;
+         
         case 7:
             $report_title="تقرير المركبات التي تم تمديدها";
             if($request->start_at =='' && $request->end_at==''){
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('increase',1)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('increase',1)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
          } else {
                     $report_title=" تقرير المركبات التي تم تمديدها من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                     $start_at =  date($request->start_at);
                     $end_at =  date($request->end_at);
-                    $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('increase',1)->get();
+                    $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('increase',1)->get();
                     return view('reports.report', compact('report','report_title','Search'));
 
             }
@@ -155,18 +182,34 @@ public function Search_customers(Request $request){
              case 8:
                 $report_title="تقرير المركبات التي تم تخليصها";
                 if($request->start_at =='' && $request->end_at==''){
-                        $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('takhlees',1)->get();
+                        $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('takhlees',1)->get();
                         return view('reports.report', compact('report','report_title','Search'));
     
              } else {
                         $report_title=" تقرير المركبات التي تم تخليصها من تاريخ ".$request->start_at.' الى '.$request->end_at ;
                         $start_at =  date($request->start_at);
                         $end_at =  date($request->end_at);
-                        $report = Emportcars::with(['car:id,chassisNo,customer_id','customer:name'])->where('takhlees',1)->get();
+                        $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('takhlees',1)->get();
                         return view('reports.report', compact('report','report_title','Search'));
     
                 }
                  break;
+            case 9:
+                    $report_title="تقرير المركبات المتخلفة عن المغادرة";
+                    if($request->start_at =='' && $request->end_at==''){
+                            $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('exitDate', '<',  date('Y-m-d')  )->where('status',  3  )->where('takhlees',0)->get();
+                            return view('reports.report', compact('report','report_title','Search'));
+        
+                 } else {
+                    $report_title="تقرير المركبات المتخلفة عن المغادرة";
+                            $report_title=" تقرير المركبات المتخلفة عن المغادرة من تاريخ ".$request->start_at.' الى '.$request->end_at ;
+                            $start_at =  date($request->start_at);
+                            $end_at =  date($request->end_at);
+                            $report = Emportcars::with(['car','customer:name,tel,tel2'])->where('exitDate', '<',  date('Y-m-d')  )->where('status',  3  )->where('takhlees',0)->whereBetween('entryDate',[$start_at,$end_at])->get();
+                            return view('reports.report', compact('report','report_title','Search'));
+        
+                    }
+                     break;         
         default:
         $Search=array(
             'type'=>1,

@@ -138,7 +138,7 @@ $updaters = User::pluck('name','id')->all();
             $emportcars = Emportcars::findOrFail($id);
             $emportcars->update($data);
 
-            return redirect()->route('customers.index')
+            return redirect()->route('customers.show',$id)
                 ->with('success_message', trans('emportcars.model_was_updated'));
       //  } catch (Exception $exception) {
 
@@ -188,19 +188,19 @@ $updaters = User::pluck('name','id')->all();
     {
         $rules = [
             'car_id' => 'required',
-            'ship_id' => 'required',
+            'ship_id' => 'nullable',
             'port_id' => 'required',
-            'portAccess_id' => 'required',
+            'portAccess_id' => 'nullable',
             'carnetNo' => 'required|string|min:1',
             'destination' => 'required|string|min:1|max:100',
-            'shippingAgent' => 'required|string|min:1|max:100',
-            'deliveryPerNo' => 'required|string|min:1',
+            'shippingAgent' => 'nullable|string|min:1|max:100',
+            'deliveryPerNo' => 'nullable|string|min:1',
            // 'deliveryPerDate' => 'required|date',
           //  'arrivedDate' => 'required|date',
             'issueDate' => 'required|date',
-            'expiryDate' => 'required|date',
-            'entryDate' => 'required|date',
-            'exitDate' => 'required|date',
+            'expiryDate' => 'nullable|date',
+            'entryDate' => 'nullable|date',
+            'exitDate' => 'nullable|date',
             'updated_by' => 'nullable', 
         ];
 

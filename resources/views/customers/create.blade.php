@@ -7,10 +7,10 @@
 
 <!--- Internal Select2 css-->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
-    <!--Internal Sumoselect css-->
-    <!--Internal  TelephoneInput css-->
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput.css') }}">
-@endsection
+  <!--  <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput.css') }}">
+-->
+
+    @endsection
 @section('page-header')
 				<!-- breadcrumb -->
 				<div class="breadcrumb-header justify-content-between">
@@ -43,7 +43,7 @@
 								</div>
 								<p class="mg-b-20">من فضلك قم بملئ جميع البيانات في الفورم التالي </p>
 
-                            <form action="{{ route('customers.store') }}" method="post" autocomplete="off"> 
+                            <form action="{{ route('customers.store') }}" method="post" name="addCustomer" id="addCustomer" autocomplete="off" data-toggle="validator"> 
                                                         {{ csrf_field() }}
 
 							
@@ -54,7 +54,7 @@
 
                                                 <div class="form-group">
                                                     <div class="col-md-offset-2 col-md-10">
-                                                        <input class="btn btn-primary" type="submit" value="أضف">
+                                                        <input class="btn btn-success" type="submit" value=" أضف الدفتر" >
                                                     </div>
                                                  </div>
                                 </div><!-- end wizard2 -->
@@ -77,7 +77,43 @@
 @endsection
 
 @section('js')
+<script src="{{ asset('js/steps.js') }}" defer></script>
+<script>
+$(function() {
 
+	//$('#addCustomer').validator('validate');
+
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+  /*
+  $("form[name='addCustomer']").validate({
+    // Specify validation rules
+    rules: {
+      // The key name on the left side is the name attribute
+      // of an input field. Validation rules are defined
+      // on the right side
+      name: "required",
+      nationalityNo: "required",
+     
+    },
+    // Specify validation error messages
+    messages: {
+      name: "Please enter your name",
+    /*  password: {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 5 characters long"
+      },
+      email: "Please enter a valid email address"*/
+  /*  },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+    submitHandler: function(form) {
+      form.submit();
+    }
+  }); */
+});
+</script>
+<?PHP /*
 <!-- Internal Jquery.steps js -->
 <script src="{{URL::asset('assets/plugins/jquery-steps/jquery.steps.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/parsleyjs/parsley.min.js')}}"></script>
@@ -101,19 +137,12 @@
     <!-- Internal TelephoneInput js-->
 <script src="{{URL::asset('assets/plugins/telephoneinput/telephoneinput.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/telephoneinput/inttelephoneinput.js')}}"></script>
+*/?>
 
-@endsection
-<script>
-     
- 
-    
 
-     /*    
-        $( function() {
-        $('.fc-datepicker').datepicker(
-            autoclose: true,
-       
-        );        
-    });*/
 
-    </script>
+
+
+
+ @endsection
+

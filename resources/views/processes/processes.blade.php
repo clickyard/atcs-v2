@@ -120,6 +120,9 @@ foreach ($customerlist as $emp) {
 			    <div class="card-body" id ="mytable" >
 					@if($customers!=null)
 			      		@include('processes.datatable')	
+				    @else 
+					 لا توجد بيانات 
+					
 					@endif
 				</div>
 				<!-- /row -->   

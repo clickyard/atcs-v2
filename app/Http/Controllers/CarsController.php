@@ -122,6 +122,12 @@ $Customers = Customers::pluck('name','id')->all();
             $cars = Cars::findOrFail($id);
             $cars->update($data);
 
+           
+           
+            if(Auth::user()->hasrole('extoffice'))   
+            return redirect()->route('intarnals')
+                ->with('success_message', trans('customers.model_was_updated'));
+        else 
             return redirect()->route('customers.index')
                 ->with('success_message', trans('cars.model_was_updated'));
         } catch (Exception $exception) {

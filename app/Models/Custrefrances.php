@@ -94,7 +94,7 @@ class Custrefrances extends Model
      */
     public function Customer()
     {
-        return $this->belongsTo('App\Models\Customer','cus_id','id');
+        return $this->belongsTo('App\Models\Customer','customer_id','id');
     }
 
 

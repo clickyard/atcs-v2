@@ -1,6 +1,6 @@
 @import "../scss/variables";
 
-@charset "UTF-8";
+//@charset "UTF-8";
 
 .app-sidebar .mCSB_draggerContainer {
   left: -11px !important;
@@ -202,7 +202,7 @@
 
 @media print {
   .app-header {
-    display: none;
+   /* display: none;*/
   }
 }
 
@@ -445,8 +445,9 @@ transform: translate3d(0, 0, 0);
 
 @media print {
   .app-sidebar {
-    display: none;
+    display: block;
   }
+
 }
 
 @media (max-width: 767px) {
@@ -601,7 +602,7 @@ slide is-expanded side-menu__item {
     color: $white-8;
     opacity: 1;
     background: transparent;
-    font-size: 12px;
+    font-size: 18px;
     box-shadow: none;
   }
 }
@@ -706,7 +707,7 @@ slide is-expanded side-menu__item {
     white-space: nowrap;
     color: #5b6e88;
     position: relative;
-    font-size: 13.5px;
+    font-size: 18px;
     line-height: 1;
     vertical-align: middle;
     font-weight: 400;
@@ -1013,7 +1014,7 @@ slide is-expanded side-menu__item {
 
 @media print {
   .app-title {
-    display: none;
+    /*display: none;*/
   }
 }
 
@@ -1069,6 +1070,9 @@ slide is-expanded side-menu__item {
 }
 
 @media print {
+  .main-sidemenu{
+    display: block;
+  }
   .tile {
     border: 1px solid #ddd;
   }

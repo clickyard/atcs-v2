@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->bigInteger( 'car_id' )->unsigned();
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
-            $table->bigInteger( 'ship_id' )->unsigned();
+            $table->bigInteger( 'ship_id' )->unsigned()->nullable();
             $table->foreign('ship_id')->references('id')->on('ships');     
             $table->bigInteger( 'port_id' )->unsigned();
             $table->foreign('port_id')->references('id')->on('shippingports');    
-            $table->bigInteger( 'portAccess_id' )->unsigned();
+            $table->bigInteger( 'portAccess_id' )->unsigned()->nullable();
             $table->foreign('portAccess_id')->references('id')->on('shippingports');   
             $table->string('carnetNo',100); 
             $table->string('destination', 100); 

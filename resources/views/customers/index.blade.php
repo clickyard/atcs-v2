@@ -5,6 +5,7 @@
 @endsection
 
 @section('css')
+
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet">
@@ -12,6 +13,9 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+
+<!--<link href="{{ asset('css/plugin.css') }}" rel="stylesheet">-->
+
 @endsection
 
 @section('page-header')
@@ -52,12 +56,13 @@
 				<!-- row -->
 				<div class="row">
 
-
+<?php  $user = Auth::user(); ?>
 				
 				
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
 							<!--- stat button            -->
+							@if($user->hasAnyRole(['superAdmin','admin','employee','seudiAdmin']))
 							<div class="col-sm-4 col-md-4">
 								
 										<div class="card-body">
@@ -66,12 +71,59 @@
 										</div>
 								
 								</div>
-					
+							@endif
 							<div class="card-body">
-							
+						@if($user->hasAnyRole(['superAdmin','admin','employee']))		
+							<form action="{{ route('markibat')}} " method="POST" role="search" autocomplete="off">
+									{{ csrf_field() }}
+
+									<label for="inputName" class="control-label"> البحث بنوع المركبة</label>
+									<div class="row  mg-b-30">
+									
+
+										<div class="col-lg-3">
+											<label class="rdiobox"><input class="type" name="type" onchange="this.form.submit()" value="1" type="radio" {{ $type==1  ? 'checked':""; }} > <span> المركبات الواصلة</span></label>
+										</div>
+										
+										<div class="col-lg-3 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input class="type" name="type" onchange="this.form.submit()"  value="2" type="radio"  {{ $type ==2  ? 'checked':""; }} > <span> مركبات بالداخل </span></label>
+										</div>
+										<div class="col-lg-4 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input  value="3"  name="type" onchange="this.form.submit()" type="radio"  {{ $type ==3  ? 'checked':""; }} > <span>بالداخل ومتبقي المدة اقل من 15يوم</span></label>
+										</div>
+										<div class="col-lg-2 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input  name="type" value="4" onchange="this.form.submit()" type="radio"  {{ $type ==4  ? 'checked':""; }} > <span> متخلفة عن المغادرة</span></label>
+										</div>
+									
+										
+									</div>
+									
+									<div class="row  mg-b-30">
+									
+
+										<div class="col-lg-3">
+											<label class="rdiobox"><input class="type" name="type" onchange="this.form.submit()" value="5" type="radio" {{ $type==5  ? 'checked':""; }} > <span> مركبات غادرت</span></label>
+										</div>
+										
+										<div class="col-lg-3 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input class="type" name="type" onchange="this.form.submit()"  value="6" type="radio"  {{ $type ==6  ? 'checked':""; }} > <span> مركبات تم تخليصها </span></label>
+										</div>
+										<div class="col-lg-3 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input  class="type"  name="type" onchange="this.form.submit()"  value="7"  type="radio"  {{ $type ==7  ? 'checked':""; }} > <span>   مركبات تم تمديدها  </span></label>
+										</div>
+										<div class="col-lg-3 mg-t-20 mg-lg-t-0">
+											<label class="rdiobox"><input class="type"  name="type"  onchange="this.form.submit()" value="8"   type="radio"  {{ $type ==8  ? 'checked':""; }} > <span>مركبات   مخالفة</span></label>
+										</div>
+									
+										
+									</div>
+									
+						    </form>
+							@endif
+							<hr/>
 							 @if(count($customersObjects) == 0)
 								<div class="panel-body text-center">
-									<h4>لا يوجد عميل متاح</h4>
+									<h4>لا توجد بيانات حالياً  </h4>
 								</div>
 							@else
 						 <div class="table-responsive">
@@ -82,11 +134,14 @@
 												<th class="border-bottom-0">#</th>
 												<th class="border-bottom-0">اسم العميل </th>
 												<th class="border-bottom-0">رقم الدفتر</th>
+												<th class="border-bottom-0">تاريخ اصدار الدفتر</th>
 												<th class="border-bottom-0">رقم الشاسي</th>
+												@if($user->hasAnyRole(['superAdmin','admin','employee']))		
+		
 												<th class="border-bottom-0">تاريخ الدخول</th>
-												<th class="border-bottom-0">تاريخ الخروج</th>
-												<th class="border-bottom-0">الحالة </th>
+												@endif
                                                 <th class="border-bottom-0">العمليات</th>
+												<th class="border-bottom-0">التفاصيل</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -100,23 +155,24 @@
                                 <tr>
                                     <td>{{ $i }}</td>
 									<td>
-									<a href="{{ route('emportcars.show', $customers->id ) }}" title="بيانات صاحب العربة">		
+									<a href="{{ route('customers.show', $customers->id ) }}" title="بيانات صاحب العربة">		
 						     			{{ $customers->customer->name }}
 									</a>
 								 </td>
-									<td>{{ $customers->carnetNo }} </td>
+								    <td>{{ $customers->carnetNo }} </td>
+									 <td>{{ $customers->issueDate }} </td>
 									<td>{{ $customers->car->chassisNo}} </td>
+									@if($user->hasAnyRole(['superAdmin','admin','employee']))	
 									<td>{{ $customers->entryDate }} </td>
-									<td>{{ $customers->exitDate }} </td>
+									@endif
 
-									<td>{{ $customers->status_value }} </td>
-					<td class="opra">
-						@if($customers->status !=5 && $customers->status !=2)
-						<div class="dropdown">
+					<td class="" style="overflow: visible;">
+						@if($customers->status !=5 && $customers->status !=2) 
+						    <div class="dropdown" style="overflow: visible;">
 									<button aria-expanded="false" aria-haspopup="true"
 										class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
 										type="button">العمليات  <i class="fas fa-caret-down ml-1"></i></button>
-									<div class="dropdown-menu tx-14">
+									<div class="dropdown-menu tx-14" style="overflow: visible;">
 											
 											<a class="dropdown-item" href="{{ route('customers.edit',$customers->car->customer_id) }}" >
 												<i class="text-info fas fa-pen"></i>&nbsp;&nbsp;
@@ -135,15 +191,37 @@
 													 تعديل بيانات الكفيل
 											</a>
 											
-											<a class="dropdown-item" href="{{ route('customers.destroy',$customers->id) }}" onclick="return confirm(&quot;هل انت متأكد من عملية الحذف؟.&quot;)">
+											<?php /*<a class="dropdown-item" href="{{ route('customers.destroy',$customers->car->customer_id) }}" >
 												<i class="text-danger las la-trash"></i>      &nbsp;&nbsp; حذف                                 
-											</a>
-											<?php /*			
-											<a class="dropdown-item" href="{{ route('reports.show',$customers->id) }}" >
+											</a>*/ ?>
+											@if($user->hasAnyRole(['superAdmin','admin']))
+											<form action="{{  route('customers.destroy',$customers->car->customer_id) }}" method="post">
+												{{ method_field('delete') }}
+												{{ csrf_field() }}
+												<a onclick="return confirm(&quot;هل انت متأكد من عملية الحذف؟.&quot;)" >
+												  <button class="dropdown-item" type="submit" ><i class="text-danger las la-trash"></i>  حذف</button>
+												</a>	
+											</form>
+											@endif
+										</div>
+								</div>
+						@endif 
+					    </td>
+                               <td>
+							   <div class="dropdown">
+									<button aria-expanded="false" aria-haspopup="true"
+										class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+										type="button">المزيد  <i class="fas fa-caret-down ml-1"></i></button>
+									<div class="dropdown-menu tx-14">
+									<a class="dropdown-item" href="{{ route('customers.show',$customers->id) }}" >
 												<i class="text-primary fas fa-eye"></i>&nbsp;&nbsp;
-													بيانات صاحب العربة
+												جميع التفاصيل
 											</a>
 											
+											<a class="dropdown-item" href="{{ route('reports.show',$customers->id) }}" >
+												<i class="text-info fas fa-eye"></i>&nbsp;&nbsp;
+													بيانات صاحب العربة
+											</a>		
 
 											<a class="dropdown-item" href="{{route('carReport', $customers->id) }}">
 												<i class=" text-success fas fa-eye"></i>&nbsp;&nbsp; 
@@ -154,13 +232,9 @@
 												<i class="text-warning fas fa-eye"></i>&nbsp;&nbsp;
 												كشف عفش
 											</a>
-*/ ?>
-											
-										</div>
-								</div>
-							@endif
-					    </td>
-                                 
+							   </div>
+							</div>
+							</td>  
 									
                                 </tr>
                             @endforeach
@@ -218,11 +292,13 @@
 @endsection
 
 @section('js')
+<script src="{{ asset('js/plugin.js') }}" defer></script>
+
 <!-- Internal Data tables -->
-<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
+<!--<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
-<!--<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
+--<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>

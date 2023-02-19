@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Emportcars;
 use DB;
+use Hash;
+use Session;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -36,7 +40,7 @@ class HomeController extends Controller
         $newdate=date('Y-m-d', strtotime($Date. ' + 15 days'));
 
         $tody=date('Y-m-d');
-        $emp = DB::table('Emportcars')
+        $emp = DB::table('emportcars')
             ->selectRaw('count(*) as allcars')
             ->selectRaw("COUNT(case when status = '0'  then 1 end)  as beforeintarnal")
             ->selectRaw("COUNT(case when status = '1'  then 1 end)  as afterintarnal")
@@ -51,5 +55,20 @@ class HomeController extends Controller
      return view('home',compact('emp') );
       //return view('temp.home');
       //return view('temp.index');
+    }
+
+
+    public  function logout()
+    {
+        Session::flush();
+
+        Auth::logout();
+
+        return Redirect('login');
+    }
+    public  function userGuid()
+    {
+      
+        return view('userGuid' );
     }
 }
