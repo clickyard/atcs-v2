@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('nationality',20)->nullable(); 
             $table->string('nationalityNo',20);  
             $table->string('passport', 100); 
-            $table->date('passportDate'); 
+            $table->date('passportDate')->nullable(); 
             $table->string('licensetype', 100)->nullable(); 
             $table->bigInteger('licenseNo')->nullable(); 
             $table->bigInteger('residenceNo'); 
-            $table->date('residenceDate'); 
+            $table->date('residenceDate')->nullable(); 
             $table->bigInteger( 'country_id' )->unsigned();
             $table->foreign('country_id')->references('id')->on('countries');
             $table->bigInteger( 'state_id' )->unsigned();
@@ -33,10 +33,10 @@ return new class extends Migration
             $table->string('houseNo', 100)->nullable();
             $table->string('street', 100)->nullable(); 
             $table->string('work_address', 200)->nullable();
-            $table->bigInteger('tel'); 
-            $table->bigInteger('tel2')->nullable();
+            $table->string('tel', 100); 
+            $table->string('tel2', 100)->nullable();
             $table->string('email', 400)->nullable();
-            $table->bigInteger('whatsup')->nullable(); 
+            $table->string('whatsup', 100)->nullable(); 
             $table->string('processType', 10);     
             $table->string('created_by', 100);
             $table->string('updated_by',100)->nullable();

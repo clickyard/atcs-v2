@@ -49,7 +49,10 @@ class Customers extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+
+        'addMore'=>'array'
+    ];
     
     /**
      * Get the Country for this model.

@@ -1,5 +1,9 @@
 <div class="row row-sm col-md-9 col-lg-12">
 
+
+        <label>نوع المركبة</label>
+        <input class="form-control" name="carType" type="text" id="carType" value="{{ old('carType', optional($cars)->carType) }}" readonly>
+
 <div class="col-md-5 col-lg-4  form-group   {{ $errors->has('veh_id') ? 'has-error' : '' }}">
     <label for="veh_id" class=" control-label">{{ trans('cars.veh_id') }}</label>
     <div class="">
@@ -31,6 +35,13 @@
         {!! $errors->first('mark_id', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
+<div class="col-md-5 col-lg-4 form-group {{ $errors->has('year') ? 'has-error' : '' }}">
+            <label for="year" class="control-label">{{ trans('cars.year') }}</label>
+            <div class="">
+                <input class="form-control" name="year" type="text" id="year" value="{{ old('year', optional($cars)->year) }}" min="1" max="100"  placeholder="{{ trans('cars.year__placeholder') }}">
+                {!! $errors->first('year', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
 
 <div class="col-md-5 col-lg-4  form-group   {{ $errors->has('place_id') ? 'has-error' : '' }}">
     <label for="place_id" class=" control-label">{{ trans('cars.place_id') }}</label>

@@ -15,20 +15,21 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();                    
-            $table->bigInteger( 'veh_id' )->unsigned();
+            $table->bigInteger( 'veh_id' )->unsigned()->nullable();
             $table->foreign('veh_id')->references('id')->on('vehicles');
-            $table->bigInteger( 'mark_id' )->unsigned();
+            $table->bigInteger( 'mark_id' )->unsigned()->nullable();
             $table->foreign('mark_id')->references('id')->on('car_marks');
-            $table->bigInteger( 'place_id' )->unsigned();
-            $table->string('year', 100)->nullable();
+            $table->bigInteger( 'place_id' )->unsigned()->nullable();
             $table->foreign('place_id')->references('id')->on('countries'); 
-            $table->bigInteger( 'customer_id' )->unsigned();
+            $table->bigInteger( 'customer_id' )->unsigned()->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');    
-            $table->string('plateNo',100); 
+            $table->string('year', 100)->nullable();
+            $table->string('carType', 500)->nullable();
+            $table->string('plateNo',100);  
             $table->decimal('valueUsd',10,2)->nullable();
             $table->string('machineNo',100)->nullable(); 
             $table->string('chassisNo',100); 
-            $table->string('color', 16);
+            $table->string('color', 16)->nullable(); 
             $table->string('created_by', 400);
             $table->string('updated_by',400)->nullable();
             $table->timestamps();

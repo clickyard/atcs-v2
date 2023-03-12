@@ -136,7 +136,7 @@
 				   
                             <li><a class="slide-item" href="{{ url('/' . ($page = 'users')) }}">قائمة المستخدمين</a></li>
 						
-          		  <?php/*    <li><a class="slide-item" href="{{ url('/' . ($page = 'roles')) }}">صلاحيات المستخدمين</a></li>
+          		  <?php  /*    <li><a class="slide-item" href="{{ url('/' . ($page = 'roles')) }}">صلاحيات المستخدمين</a></li>
 					*/ ?>
 						</ul>
                 </li>

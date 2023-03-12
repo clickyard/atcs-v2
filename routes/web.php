@@ -101,6 +101,7 @@ Route::get('/revenues', [App\Http\Controllers\AmountsController::class, 'revenue
 
 
 //Route::get('/show', [App\Http\Controllers\CustomersController::class, 'index']);
+Route::get('/emportExcel', [App\Http\Controllers\CustomersController::class, 'emportExcel'])->name('emportExcel');
 
 
 Route::resource('countries', App\Http\Controllers\CountriesController::class);

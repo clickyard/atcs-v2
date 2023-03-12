@@ -15,16 +15,25 @@ use App\Models\Car_marks;
 use App\Models\Custrefrances;
 use App\Models\Guarantors;
 
+
+use App\Models\Leavingcars;
+use App\Models\Takhlees;
+use App\Models\Revenues;
+use App\Models\Amounts;
+use App\Models\SerialNumber;
+
 use Illuminate\Support\Facades\DB;
 
 //use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use Carbon\Carbon;
+
 //use Exception;
 
 class CustomersController extends Controller
 {
-
 
 
     public function __construct()
@@ -68,6 +77,7 @@ public function markibat( Request $request)
     //  return $newdate;
     $customersObjects=array();
     $title="";
+    $excelsheet="no";
     $type =$request->type;
 
 
@@ -189,6 +199,232 @@ public function markibat( Request $request)
      *
      * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
      */
+    public function emportExcel()
+    {
+       // $select = DB::select('select * from execlsheet ', array(1));
+       $excel_status = DB::table('excelstatus')
+        ->select('*')   
+        ->first();
+
+          
+        if ($excel_status->status == 0){
+           
+
+            return   redirect()->route('customers.index')
+                        ->with('success_message', 'لقد تم رفع الملف سابقاً');
+        } else{
+
+        $select = DB::table('execlsheet')
+        ->select('*')   
+       // ->where('id',14)
+        ->get();
+/*
+        SELECT  `carnetNo`,`carnetDate`,`name`,`nationalityNo`,`carType`,`chassisNo`,
+       `entrydate`,`tel1`,`tel2`,`entryType`,`increse1`,`increse2`,`leavingIncrese`,
+       `leavingDate`,`status`
+*/
+$sd = Countries::where('code', '=',  'sd' )->orwhere('code', '=',  'SD' )->first()->id;
+$sa = Countries::where('code', '=',  'sa' )->orwhere('code', '=',  'SA' )->first()->id;
+
+//$date = Carbon::now()->setTime(0,0)->format('Y-m-d');
+$date = '0000-00-00';
+
+foreach ($select as $value){
+            Customers::create( [
+                'name' => $value->name,
+                'nationalityNo'=>$value->nationalityNo,
+                'passport'=>'لا يوجد',
+                'residenceNo'=>'0',
+                'passportDate'=>$date,
+                'residenceDate'=>$date,
+                'country_id'=>'1',
+                'state_id'=>'1',
+                'city'=>'لا يوجد',
+                'tel'=>$value->tel1,
+                'tel2'=>$value->tel2,
+                'processType'=>'emp',
+                'created_by'=>Auth::user()->name
+            ]  );
+       
+         $cust_id = Customers::latest()->first()->id;
+/////////////////////////////////////////////////////////////////////////////////////
+
+for($i=0;$i<2;$i++){
+    Custrefrances::create( [
+        'customer_id' => $cust_id,
+        'ccountry_id'=>$sd,
+        'cname'=>'لا يوجد',
+        'cstate_id'=>'1',
+        'ccity'=>'لا يوجد',
+        'cblock'=>'لا يوجد',
+        'chouseNo'=>'لا يوجد',
+        'cstreet'=>'لا يوجد',
+        'cwork_address'=>'لا يوجد',
+        'ctel'=>'لا يوجد',
+        'created_by'=>Auth::user()->name
+
+    ]);
+}
+///////////////////////////////////////////////////////////////////////////////////////
+Guarantors::create([
+            'customer_id' => $cust_id,
+            'gname' =>'لا يوجد',
+            'gcountry_id' => $sa,
+            'gstate_id' => 4,
+            'gcity' => 'لا يوجد',
+            'ghouseNo' => 'لا يوجد',
+            'gstreet' =>'لا يوجد',
+            'gwork_address' => 'لا يوجد',
+            'gtel' =>$value->tel2,
+            'gtel2' => 'لا يوجد',
+            'gwhatsup' => 'لا يوجد',
+            'created_by'=>Auth::user()->name
+]);
+//////////////////////////////////////////////////////////////////////////////////////
+         Cars::create( [
+            'plateNo' => 'لا يوجد',
+            'carType' => $value->carType,
+            'chassisNo' => $value->chassisNo,
+            'customer_id' => $cust_id,
+            'created_by'=>Auth::user()->name
+        
+        ]);
+        $car_id = Cars::latest()->first()->id;
+        ////////////////////////////////////////////////////////////////////////////////
+        $takhlees=0;
+        $allow_increase=1;
+      if($value->status ==1)
+            $status_value="بالداخل";
+      else if($value->status ==2){ $status_value="غادر"; $allow_increase=0;}
+      else if($value->status ==5){ $status_value="خلص"; $takhlees=1;  $allow_increase=0;}
+      else if($value->status ==6){ $status_value="مخالفة دفتر"; $allow_increase=0;}
+       
+        $expiryDate=date('Y-m-d', strtotime($value->carnetDate. ' + 12 months'));
+        $entrydate=date('Y-m-d', strtotime($value->entrydate));
+
+        Emportcars::create( [
+            'port_id' => 1,
+            'carnetNo' => $value->carnetNo,
+            'destination' => 'لا يوجد',
+            'issueDate' => $value->carnetDate,
+            'expiryDate' => $expiryDate,
+            'entryDate' => $entrydate,
+            'status'  =>  $value->status,
+            'allow_increase'  =>$allow_increase,
+            'increase'  =>0 ,
+            'duration' =>3,
+            'alerts' =>0,
+            'takhlees'=>$takhlees,
+            'status_value'=>$status_value,
+            'car_id' => $car_id,
+            'created_by'=>Auth::user()->name 
+        ]);
+        $emp_id = Emportcars::latest()->first()->id;
+/// ////////////////////////////////////////////////////////////////////////////////
+$amount=Amounts::firstOrFail();
+    
+Revenues::create([
+      'carnetNo' => $value->carnetNo,
+      'emp_id' => $emp_id,
+      'carnet' => $amount->carnet,
+      'portsudan' => 0,
+      'increase' => 0,
+      'takhlees' => 0,
+      'created_by' => Auth::user()->name
+
+  ]); 
+////////////////////////////////////////////////////////////////////////////////////
+        if($value->status==2) {
+            $no=SerialNumber::firstOrFail();
+            $count = Leavingcars::count();
+            $seri=$count+1;
+             $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
+            Leavingcars::create( [
+                'serialNo' => $serialNo,
+                'voucher' => $no->voucherNo+1,
+                'entryDate'=>$value->entryType,
+                'exitDate'=>$value->leavingDate,
+                'signature' =>Auth::user()->name,
+                'emp_id'=>$emp_id
+            ]);
+            SerialNumber::where('id', $no->id)->update([
+                'voucherNo' => $no->voucherNo+1,
+           ] );
+
+        }else  if($value->status ==5) {
+            
+                $no=SerialNumber::firstOrFail();
+                $count = Takhlees::count();
+                $seri=$count+1;
+                $serialNo=$seri."/ن/س/ر/".date("Y").'/'.date("m");
+
+                    Takhlees::create([
+                        'serialNo' => $serialNo,
+                        'voucher' => $no->voucher+1,
+                        'entryDate'=>Date('Y-m-d'),
+                        'signature' =>Auth::user()->name,
+                        'emp_id'=>$emp_id
+                    ]);
+                  
+                    $amount = Amounts::firstOrFail();
+                    $takhlees=($amount->letter + $amount->moanye);
+
+                    Revenues::where('emp_id',$emp_id)->update([
+                        'takhlees' =>$takhlees,
+                        'updated_by' => Auth::user()->name
+                    ]);
+
+                    SerialNumber::where('id', $no->id)->update([
+                        'voucherNo' => $no->voucherNo+1,
+                ] );
+
+
+        }
+        if($value->increse1 ==1 ){
+
+            $amount = Amounts::firstOrFail();
+            $revenues = Revenues::where('emp_id', $emp_id)->first();
+            $increase=($amount->increase + $revenues->increase);
+    
+            Revenues::where('emp_id',$emp_id)->update([
+                'increase' =>$increase,
+                'updated_by' => Auth::user()->name
+            ]);
+
+        }
+        if($value->increse2 ==1 ){
+
+            $amount = Amounts::firstOrFail();
+            $revenues = Revenues::where('emp_id', $emp_id)->first();
+            $increase=($amount->increase + $revenues->increase);
+    
+            Revenues::where('emp_id',$emp_id)->update([
+                'increase' =>$increase,
+                'updated_by' => Auth::user()->name
+            ]);
+
+        }
+        if($value->leavingIncrese ==1 ){
+
+            $amount = Amounts::firstOrFail();
+            $revenues = Revenues::where('emp_id', $emp_id)->first();
+            $increase=($amount->increase + $revenues->increase);
+    
+            Revenues::where('emp_id',$emp_id)->update([
+                'increase' =>$increase,
+                'updated_by' => Auth::user()->name
+            ]);
+
+        }
+    }
+    // $excelsheet= "no";
+     DB::table('excelstatus')
+        ->update(array('status' => 0));
+        return redirect()->route('customers.index')
+        ->with('success_message', 'لقد تم رفع الملف بنجاح');
+}
+}
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     public function store(Request $request)
     {
 
@@ -238,9 +474,9 @@ $cus_ref= $request->validate([
             'addMore.*.cname' => 'required|string|min:1|max:400',
             'addMore.*.cstate_id' => 'required',
             'addMore.*.ccity' => 'required|string|min:1|max:900',
-            'addMore.*.cblock' => 'required|string|min:1|max:900',
-            'addMore.*.chouseNo' => 'required|string|min:1|max:100',
-            'addMore.*.cstreet' => 'required|string|min:1|max:900',
+            'addMore.*.cblock' => '|nullable|min:1|max:900',
+            'addMore.*.chouseNo' => 'nullable|string|min:1|max:100',
+            'addMore.*.cstreet' => 'nullable|string|min:1|max:900',
             'addMore.*.cwork_address' => 'required|string|min:1|max:900',
             'addMore.*.ctel' => 'required|string|min:1'
 ]);
@@ -418,11 +654,11 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
     {
         $rules = [
                 'name' => 'required|string|min:1|max:400',
-                'nationalityNo' => 'required|string|min:1',
-                'passport' => 'required|string|min:1|max:100',
-                'passportDate' => 'required',
-                'residenceNo' => 'required|string|min:1',
-                'residenceDate' => 'required',
+                'nationalityNo' => 'required|unique:customers|string|min:1',
+                'passport' => 'required|unique:customers|string|min:1|max:100',
+                'passportDate' => 'nullable',
+                'residenceNo' => 'required|unique:customers|string|min:1',
+                'residenceDate' => 'nullable',
                 'state_id' => 'required',
                 'city' => 'required|string|min:1|max:900',
                 'block' => 'nullable|string|min:1|max:900',
@@ -435,9 +671,29 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
                 'whatsup' => 'nullable|string|min:0',
           
         ];
+        
+       $massage= [
+            'name.required' =>'يرجى ادخال اسم العميل ',
+            'nationalityNo.required' =>'يرجى ادخال  الرقم الوطني ',
+            'passport.required' =>'يرجى ادخال رقم الجواز ',
+           // 'passportDate.required' =>'يرجى ادخال تاريخ الجواز ',
+            'residenceNo.required' =>'يرجى ادخال رقم الإقامة ',
+           // 'residenceDate.required' =>'يرجى ادخال تاريخ انتهاء الاقامة ',
+            'state_id.required' =>'يرجى ادخال اسم المدينة للعميل ',
+            'city.required' =>'يرجى ادخال اسم المنطقة للعميل ',
+            'tel.required' =>'يرجى ادخال رقم هاتف العميل ',
+
+            'nationalityNo.unique' =>'هذا الرقم الوطني  مسجل مسبقا ',
+            'passport.unique' =>'  هذا الجواز  مسجل مسبقا ',
+            'residenceNo.unique' =>'هذه  الإقامة  مسجلة مسبقا ',
+
+
+  
+  
+         ];
 
         
-        $data = $request->validate($rules);
+        $data = $request->validate($rules,$massage);
 
 
 
@@ -451,17 +707,33 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
             'veh_id' => 'required',
             'mark_id' => 'required',
             'place_id' => 'required',
-            'plateNo' => 'required|string|min:1',
+            'plateNo' => 'required|unique:cars|string|min:1',
             'valueUsd' => 'nullable|numeric|min:-999999.99|max:999999.99',
-            'machineNo' => 'nullable|string|min:1',
-            'chassisNo' => 'required|string|min:1',
-            'color' => 'required|string|min:1',
+            'machineNo' => 'required|unique:cars|string|min:1',
+            'chassisNo' => 'required|unique:cars|string|min:1',
+            'color' => 'nullable|string|min:1',
             'year' => 'nullable|string|min:1',
         
         ];
+        $massage= [
+            'veh_id.required' =>'يرجى ادخال  السيارة ',
+            'mark_id.required' =>'يرجى ادخال  ماركة السيارة ',
+            'place_id.required' =>'يرجى  بلد تسجيل السيارة ',
+            'machineNo.required' =>'يرجى ادخال رقم الماكنة ',
+            'plateNo.required' =>'يرجى ادخال رقم اللوحة ',
+            'chassisNo.required' =>'يرجى ادخال رقم  الشاسي ',
+          
 
+            'machineNo.unique' =>'رقم هذه الماكنة مسجل مسبقا ',
+            'chassisNo.unique' =>'  رقم هذا الشاسي  مسجل مسبقا ',
+            'plateNo.unique' =>'رقم هذه اللوحة مسجل مسبقا ',
+
+
+  
+  
+         ];
         
-        $data = $request->validate($rules);
+        $data = $request->validate($rules,$massage);
 
 
 
@@ -476,7 +748,7 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
             'ship_id' => 'nullable',
             'port_id' => 'required',
             'portAccess_id' => 'nullable',
-            'carnetNo' => 'required|string|min:1',
+            'carnetNo' => 'required|unique:emportcars|string|min:1',
             'destination' => 'required|string|min:1|max:100',
             'shippingAgent' => 'nullable|string|min:1|max:100',
            'deliveryPerNo' => 'nullable|string|min:1',
@@ -487,8 +759,19 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
          
         ];
 
-        
-        $data = $request->validate($rules);
+        $massage= [
+            'carnetNo.required' =>'يرجى ادخال  رقم الدفتر ',
+            'destination.required' =>'يرجى ادخال جهة القدوم  ',
+            'port_id.required' =>'يرجى ادخال ميناء الشحن ',
+          
+
+            'carnetNo.unique' =>'رقم هذا الدفتر مسجل مسبقا ',
+
+
+  
+  
+         ];
+        $data = $request->validate($rules,$massage);
 
 
 
@@ -514,10 +797,17 @@ if($data && $data_car && $data_emp && $data_gua && $cus_ref){
         
         ];
 
-        
-        $data = $request->validate($rules);
+        $massage= [
+            'gname.required' =>'يرجى ادخال  اسم الكفيل ',
+            'gcountry_id.required' =>'يرجى ادخال دولة الكفيل  ',
+            'gstate_id.required' =>'يرجى ادخال مدينة الكفيل ',
+            'gcity.required' =>'يرجى ادخال منطقة الكفيل ',
+            'gtel.required' =>'يرجى ادخال رقم هاتف الكفيل '
 
-
+  
+  
+         ];
+        $data = $request->validate($rules,$massage);
 
 
         return $data;

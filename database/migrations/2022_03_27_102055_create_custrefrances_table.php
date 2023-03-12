@@ -18,14 +18,14 @@ return new class extends Migration
             $table->string('cname', 400); 
             $table->bigInteger( 'ccountry_id' )->unsigned();
             $table->foreign('ccountry_id')->references('id')->on('countries');
-            $table->bigInteger( 'cstate_id' )->unsigned();
+            $table->bigInteger( 'cstate_id' )->unsigned()->nullable();
             $table->foreign('cstate_id')->references('id')->on('states');
             $table->string('ccity', 100); 
             $table->string('cblock', 100)->nullable(); 
             $table->string('chouseNo', 100)->nullable();  
             $table->string('cstreet', 200)->nullable(); 
             $table->string('cwork_address', 200)->nullable(); 
-            $table->bigInteger('ctel')->nullable(); 
+            $table->string('ctel', 100)->nullable(); 
             $table->string('created_by', 100);
             $table->string('updated_by',100)->nullable();            
             $table->bigInteger( 'customer_id' )->unsigned();

@@ -169,18 +169,33 @@ $Customers = Customers::pluck('name','id')->all();
     protected function getData(Request $request)
     {
         $rules = [
+                
             'veh_id' => 'required',
             'mark_id' => 'required',
             'place_id' => 'required',
             'plateNo' => 'required|string|min:1',
-            'valueUsd' => 'required|numeric|min:-999999.99|max:999999.99',
+            'valueUsd' => 'nullable|numeric|min:-999999.99|max:999999.99',
             'machineNo' => 'required|string|min:1',
             'chassisNo' => 'required|string|min:1',
-            'color' => 'required|string|min:1|max:16',
-           
+            'color' => 'nullable|string|min:1',
+            'year' => 'nullable|string|min:1',
         ];
 
+        $massage= [
+            'veh_id.required' =>'يرجى ادخال  السيارة ',
+            'mark_id.required' =>'يرجى ادخال  ماركة السيارة ',
+            'place_id.required' =>'يرجى  بلد تسجيل السيارة ',
+            'machineNo.required' =>'يرجى ادخال رقم الماكنة ',
+            'plateNo.required' =>'يرجى ادخال رقم اللوحة ',
+            'chassisNo.required' =>'يرجى ادخال رقم  الشاسي ',
+          
+
+
+  
+  
+         ];
         
+        $data = $request->validate($rules,$massage);
         $data = $request->validate($rules);
 
 

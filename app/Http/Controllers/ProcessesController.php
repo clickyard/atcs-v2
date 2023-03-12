@@ -111,12 +111,12 @@ public function Search_process(Request $request)
 {
     
     $emp_id=$request->carnet;
-  //  $customerlist=Emportcars::with(['customer:name','mycars:id,plateNo'])->get(); 
-  //  $customers= Emportcars::with(['customer:name','car.Vehicle:id,name'])->findOrFail($emp_id);
+    $Ships = Ships::all();
+    $Shippingports = Shippingports::all();
     $customers= Emportcars::where('carnetNo',$request->carnet)->with(['customer:name','car.Vehicle:id,name'])->firstOrFail();
 
 
- return view('processes.processes', compact('customers'));
+ return view('processes.processes', compact('customers','Ships','Shippingports'));
 
 /*
    switch ($type) {
@@ -358,7 +358,8 @@ public function intarnalCars()
             ]);
 
             $amount = Amounts::firstOrFail();
-            $increase=($amount->increase);
+            $revenues = Revenues::where('emp_id', $request->emp_id)->findOrFail();
+            $increase=($amount->increase + $revenues->increase);
     
             Revenues::where('emp_id',$request->emp_id)->update([
                 'increase' =>$increase,
@@ -558,7 +559,7 @@ public function SearchLetters(Request $request){
     ->with(['customer','car','mytakhlees','myincreases','myleavingcars','myalerts'])
     ->firstOrFail();
 
-    return view('processes.ShowLetters', compact('emportcar'));
+    return view('processes.showLetters', compact('emportcar'));
 
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -567,7 +568,7 @@ public function ShowLetters(){
 
     $emportcar=array();
 
-    return view('processes.ShowLetters', compact('emportcar'));
+    return view('processes.showLetters', compact('emportcar'));
 
 }
 

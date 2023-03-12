@@ -152,15 +152,21 @@ class IntarnalFilesController extends Controller
      */
     public function update($id, Request $request)
     {
-        try {
+        try { 
             
             $data = $this->getData($request);
             
             $intarnalFiles = Intarnal_files::findOrFail($id);
             $intarnalFiles->update($data);
+ 
 
-            return redirect()->route('intarnal_files.index')
-                ->with('success_message', trans('intarnal_files.model_was_updated'));
+       if(Auth::user()->hasrole('extoffice'))   
+            return redirect()->route('intarnals')
+                ->with('success_message', trans('customers.model_was_updated'));
+        else  
+             return redirect()->route('customers.index')
+                ->with('success_message', trans('customers.model_was_updated'));
+                
         } catch (Exception $exception) {
 
             return back()->withInput()

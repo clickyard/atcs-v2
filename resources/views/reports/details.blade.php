@@ -12,7 +12,7 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
-@endsection
+@endsection 
 
 @section('page-header')
 				<!-- breadcrumb -->
@@ -118,12 +118,12 @@
 											</tr>
 											<tr>
 												<td >رقم الإقامة : {{ optional($customers->customer)->residenceNo }}</td>	
-												<td> تاريخ اصدار الجواز : {{ optional($customers->customer)->passportDate }}</td>
+												<td> تاريخ اصدار الجواز : {{ optional($customers->customer)->nationality }} </td>
 											
 											</tr>
 											<tr>	
 											    <td>رقم الجواز : {{ optional($customers->customer)->passport }}</td>
-												<td>تاري خ انتهاء االقامة   : {{ optional($customers->customer)->residenceDate }}</td>
+												<td>تاري خ انتهاء االقامة   : @if($customers->customer->street == null) null @else {{ optional($customers->customer)->residenceDate }} @endif</td>
 												
 
 											</tr>
@@ -177,7 +177,7 @@
 												<td>التلفون : {{ optional($customers->customer->guarantor)->gtel }}</td>	
 											</tr>
 											<tr>
-											    <td>المدينة : {{ $customers->customer->guarantor->myState->name }} </td>
+											    <td>المدينة : @if($customers->customer->guarantor->myState !=null){{ $customers->customer->guarantor->myState->name }}  @endif</td>
 												<td>   الحي  : {{ optional($customers->customer->guarantor)->gcity }} </td>
 											</tr>
 											<tr>

@@ -17,15 +17,17 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $this->call([
-      //      CreateAdminUserSeeder::class,
-      //      PermissionTableSeeder::class,
-      //      CountriesSeeder::class,
-      //      VehiclesSeeder::class,
-      //      ShipsSeeder::class,
-      //      ShippingportsSeeder::class,
+            CreateAdminUserSeeder::class,
+            PermissionTableSeeder::class,
+            CountriesSeeder::class,
+            VehiclesSeeder::class,
+            ShipsSeeder::class,
+            ShippingportsSeeder::class,
+            ExcelsheetSeeder::class,
+      
         ]);
 
-
+/*
         \App\Models\Customers::factory()->count(1)->create();
         \App\Models\Custrefrances::factory()->count(2)->create();
         \App\Models\Guarantors::factory()->count(1)->create();            
@@ -47,6 +49,6 @@ class DatabaseSeeder extends Seeder
               'created_by' => \App\Models\User::pluck('name')->random()
 
           ]);                   
-
+*/
     }
 }

@@ -3,8 +3,8 @@
 
 <div class="row row-sm col-md-9 col-lg-12">
 		
-
-
+     
+<?php /*
 <div class="col-md-5 col-lg-4  form-group {{ $errors->has('state_id') ? 'has-error' : '' }}">
     <label for="state_id" class=" control-label">{{ trans('customers.state_id') }}</label>
     <div class="">
@@ -97,7 +97,7 @@
     </div>
 </div>
 </div>
-
+*/ ?>
 
 <hr/>
 <?php for ($i = 0; $i < 2; $i++) { ?>
@@ -109,7 +109,7 @@
             <div class="col-md-5 col-lg-4  form-group   {{ $errors->has('cname') ? 'has-error' : '' }}">
             <label for="cname" class="control-label">{{ trans('custrefrances.cname') }}</label>
             <div class="">
-                <input class="form-control" name="addMore[{{ $i }}][cname] " type="text" id="cname" value="{{ old('cname', optional($customers)->cname) }}" minlength="1" maxlength="400" required="true" placeholder="{{ trans('custrefrances.cname__placeholder') }}">
+                <input class="form-control" name="addMore[{{ $i }}]['cname'] " type="text" id="cname" value="{{ isset( optional($customers)->addMore) ? $customers->addMore[$i]['cname'] :'no' }}" minlength="1" maxlength="400" required="true" placeholder="{{ trans('custrefrances.cname__placeholder') }}">
                 {!! $errors->first('cname', '<p class="help-block">:message</p>') !!}
             </div>
             </div>
@@ -143,7 +143,7 @@
         <div class="col-md-5 col-lg-4  form-group   {{ $errors->has('cblock') ? 'has-error' : '' }}">
             <label for="cblock" class="control-label">{{ trans('custrefrances.cblock') }}</label>
             <div class="">
-                <input class="form-control" name="addMore[{{ $i }}][cblock]" type="text" id="cblock" value="{{ old('cblock', optional($customers)->cblock) }}" minlength="1" maxlength="900" required="true"  placeholder="{{ trans('custrefrances.cblock__placeholder') }}">
+                <input class="form-control" name="addMore[{{ $i }}][cblock]" type="text" id="cblock" value="{{ old('cblock', optional($customers)->cblock) }}" minlength="1" maxlength="900"   placeholder="{{ trans('custrefrances.cblock__placeholder') }}">
                 {!! $errors->first('cblock', '<p class="help-block">:message</p>') !!}
             </div>
         </div>

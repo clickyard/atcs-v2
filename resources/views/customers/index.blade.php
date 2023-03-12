@@ -61,8 +61,20 @@
 				
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
+
+						@if($user->hasAnyRole(['superAdmin']))
+							<div class="col-sm-4 col-md-4">
+								
+										<div class="card-body">
+										
+											<a class="btn ripple btn-warning"  href="{{ route('emportExcel') }}"><i class="mdi mdi-plus"></i>    رفع بيانات  ملف الإكسل </a>
+										</div>
+								
+								</div>
+							
+							@endif
 							<!--- stat button            -->
-							@if($user->hasAnyRole(['superAdmin','admin','employee','seudiAdmin']))
+							@if($user->hasAnyRole(['superAdmin','admin','employee','agent']))
 							<div class="col-sm-4 col-md-4">
 								
 										<div class="card-body">

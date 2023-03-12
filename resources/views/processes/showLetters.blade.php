@@ -1,17 +1,17 @@
 @extends('layouts.master')
 @section('title')
-
-الإجراءات
+الخطابات
 @endsection
 
 @section('css')
 <!-- Internal Data table css -->
+
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
-<link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+
 @endsection
 
 @section('page-header')
@@ -19,7 +19,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"> الإعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/  اجراءات الافراج المؤقت </span>
+							<h4 class="content-title mb-0 my-auto"> الإعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/    الخطابات </span>
 						</div>
 					</div>
 				
@@ -174,7 +174,7 @@ foreach ($customerlist as $emp) {
 										<button class="btn btn-danger  float-left mt-3 mr-2" id="print_Button" onclick="printDiv()"> <i
                                				 class="mdi mdi-printer ml-1"></i>طباعة</button>	
 										<div class="panel-body border" id="print">
-											@if($emportcar->myincreases != null)	
+											@if(count($emportcar->myincreases) > 0)	
 												<img src="{{URL::asset('assets/img/atcsheader.jpg')}}"  width="100%"/> 
 
 												<div class="card-header pb-0">
@@ -246,7 +246,7 @@ foreach ($customerlist as $emp) {
 										<button class="btn btn-danger  float-left mt-3 mr-2" id="print_Button" onclick="printDiv2()"> <i
                                				 class="mdi mdi-printer ml-1"></i>طباعة</button>	
 										<div class="panel-body border" id="print2">
-											@if($emportcar->myincreases != null && $emportcar->myincreases[1]!=null)	
+											@if(count($emportcar->myincreases) == 2)	
 												<img src="{{URL::asset('assets/img/atcsheader.jpg')}}"  width="100%"/> 
 
 												<div class="card-header pb-0">
@@ -569,27 +569,36 @@ foreach ($customerlist as $emp) {
 		<!-- main-content closed -->
 @endsection
 @section('js')
+
+
 <!-- Internal Data tables -->
+
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
+
+<?php /*
+
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
+
+
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
-<!--<script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/pdfmake.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/vfs_fonts.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.html5.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.print.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>-->
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
+<!--
 <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
 <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
-
+-->
 <!--Internal  Datepicker js -->
 <script src="{{ URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js') }}"></script>
 <!--Internal  jquery.maskedinput js -->
@@ -609,7 +618,7 @@ foreach ($customerlist as $emp) {
 <!-- Internal form-elements js -->
 <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
 
-
+*/?>
 
 <script type="text/javascript">
      

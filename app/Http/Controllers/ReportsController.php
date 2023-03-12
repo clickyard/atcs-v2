@@ -16,7 +16,7 @@ use Exception;
 
 class ReportsController extends Controller
 {
-
+ 
 
     public function __construct()
     {
@@ -26,8 +26,8 @@ class ReportsController extends Controller
    ///////////////////////////////////////////////////////////////////////
    public function show($id)
    {
-       $customers = Emportcars::with(['car:id,chassisNo,customer_id','customer.guarantor'])->findOrFail($id);
- 
+       $customers = Emportcars::with(['customer','car'])->findOrFail($id);
+       //return $customers;
        return view('reports.details', compact('customers'));
    }
     ///////////////////////////////////////////////////////////////////////

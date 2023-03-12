@@ -77,35 +77,110 @@
 			  @method('post')
 			إذن دخول بيانات افراج جمركي
 			<div class="row mg-t-20 ">
-			        <input type="hidden" name="emp_id"  value="{{$customers->id}}" />
+			              <input type="hidden" name="emp_id"  value="{{$customers->id}}" />
+					    <div class="row">
 
-			       
-					<div class="col-lg-4">
-								<label for="start_date" class=" control-label">   تاريخ الدخول</label>
-								<div class="">
-									<input class="form-control fc-datepicker" id="entryDate" name="entryDate" data-date-format="yy-mm-dd"  value=""  >
-					</div>
-					</div>
-					<div class="col-lg-4">
-								<label for="start_date" class=" control-label">  تاريخ الخروج</label>
-								<div class="">
-									<input class="form-control fc-datepicker" readonly id="exitDate" name="exitDate" data-date-format="yy-mm-dd"  value=""  >
-							   </div>
-					</div>
+							<div class="col-md-6">
+									<div class="form-group {{ $errors->has('serialNo') ? 'has-error' : '' }}">
+										<label for="serialNo" class="control-label">{{ trans('intarnal_files.serialNo') }}</label>
+										<div class="">
+											<input class="form-control" name="serialNo" type="text" id="serialNo" value="" minlength="1" maxlength="10" required  placeholder="{{ trans('intarnal_files.serialNo__placeholder') }}">
+											{!! $errors->first('serialNo', '<p class="help-block">:message</p>') !!}
+										</div>
+									</div>
+						     </div>
+
+							<div class="col-md-6">
+
+									<div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
+										<label for="date" class=" control-label">{{ trans('intarnal_files.date') }}</label>
+										
+											<input class="form-control" name="entryDate" type="date" id="date" value="" required="true" placeholder="{{ trans('intarnal_files.date__placeholder') }}">
+											{!! $errors->first('date', '<p class="help-block">:message</p>') !!}
+										
+									</div>
+						     </div>
+						</div>
+
+						<div class="row">
+
+							    <div class="col-md-6">
+
+									<label for="portAccess_id" class="control-label">{{ trans('emportcars.portAccess_id') }}</label>
+									<div class="col">
+										<select class="form-control" id="portAccess_id" name="portAccess_id" required="true">
+												<option value="" >{{ trans('emportcars.portAccess_id__placeholder') }}</option>
+											@foreach ($Shippingports as $key =>  $Shippingport)
+												<option value="{{ $Shippingport->id }}" >
+													{{ $Shippingport->name  }}
+												</option>
+											@endforeach
+										</select>
+										
+										{!! $errors->first('portAccess_id', '<p class="help-block">:message</p>') !!}
+									</div>
+						       </div>
+				
+							    <div class="col-md-6">
+
+									<label for="ship_id" class="control-label">{{ trans('emportcars.ship_id') }}</label>
+									<div class="">
+										<select class="form-control" id="ship_id" name="ship_id" required="true">
+												<option value="" >{{ trans('emportcars.ship_id__placeholder') }}</option>
+											@foreach ($Ships as $key => $Ship)
+												<option value="{{ $Ship->id }}"  >
+													{{ $Ship->name  }}
+												</option>
+											@endforeach
+										</select>
+										
+										{!! $errors->first('ship_id', '<p class="help-block">:message</p>') !!}
+									</div>
+							    </div>
+						</div>	
+						   <div>
+								<div class="col-md-6">
+
+										<label for="shippingAgent" class="control-label">{{ trans('emportcars.shippingAgent') }}</label>
+										<div class="">
+											<input class="form-control" name="shippingAgent" type="text" id="shippingAgent" value="" min="1" max="100"  placeholder="{{ trans('emportcars.shippingAgent__placeholder') }}">
+											{!! $errors->first('shippingAgent', '<p class="help-block">:message</p>') !!}
+										</div>
+								 </div>
+								 <div class="col-md-6">
+
+										 <label for="deliveryPerNo" class=" control-label">{{ trans('emportcars.deliveryPerNo') }}</label>
+										<div class="">
+											<input class="form-control" name="deliveryPerNo" type="text" id="deliveryPerNo" value="" minlength="1"  placeholder="{{ trans('emportcars.deliveryPerNo__placeholder') }}">
+											{!! $errors->first('deliveryPerNo', '<p class="help-block">:message</p>') !!}
+										</div>
+								 </div>
+						</div>
 					
-					
-					 <div class=" col-lg-4 mg-t-20">
-						<h6 class="card-title mb-1">المرفقات: إذن دخول</h6>
-						<p class="text-muted card-sub-title">
-						من فضلك ارفع نوع الملفات المسموح بها وهي ( <code>jpg, .png, image/jpeg, image/png , pdf</code> )			
-						</p>
-					</div>	
-					<div class=" col-lg-7 mg-t-50">
-						<input type="file"  name="file_name" accept=".jpg, .png, image/jpeg, image/png, .pdf" class="dropify"  value=""  />
-					</div>
-					<div class="col-lg-4 "> 
-						<button class="btn ripple btn-primary" type="submit" type="button">تأكيد</button>
-					 </div>
+
+							<div class="row">
+									<div class="col-lg-12 col-md-12">
+										<div class="card">
+											<div class="mg-b-50">
+													<h6 class="card-title mb-1">المرفقات: إذن دخول</h6>
+													<p class="text-muted card-sub-title">
+														من فضلك ارفع نوع الملفات المسموح بها وهي ( <code>jpg, .png, image/jpeg, image/png , pdf</code> )			
+																</p>
+											</div>
+												<div class="row mb-4">
+												
+													<div class="col-sm-12 col-md-6 mg-t-10 mg-sm-t-0">
+														<input type="file"  name="file_name" accept=".jpg, .png, image/jpeg, image/png, .pdf" class="dropify"  value=""  />
+													</div>
+												
+												</div>
+										
+											<button class="btn ripple btn-primary" type="submit" type="button">حفظ</button>
+								      </div>
+								
+							        </div>
+					      	 </div>
+			        
              </div>
         </form>
 </div>
@@ -193,7 +268,7 @@
 <!-- //////////////////////////////////////  مغادرة //////////////////////////////////////////////////////// -->
 <div  id="form4"  style="display:none;">
 	
-		<form method="POST" action="{{ route('leavingCars_update') }}"  >
+		<form method="POST" action="{{ route('leavingCars_update') }}"  autocomplete="off">
           				  {{ csrf_field() }}
 
 						  مغادرة عربة
@@ -210,13 +285,14 @@
 				</div>
 		
 				<div class="col-lg-3">
-				<label for="exitDate" class=" control-label">تاريخ المغادرة</label>
-				<div class="">
-					<input class="form-control" name="exitDate" type="date" id="exitDate" value="" minlength="1" maxlength="10" required="true" placeholder="">
-				</div>
-			</div>
-			<div class="col-lg-3 "> 
-			<button class="btn ripple btn-primary" type="submit" type="button">مغادرة</button>
+						<label for="exitDate" class=" control-label">تاريخ المغادرة</label>
+						<div class="">
+							<input class="form-control fc-datepicker" name="exitDate" type="text" id="exitDate" value=""   placeholder="" />
+						</div>
+			    </div>
+			<div class="col-lg-3 mt-50 " > 
+				<br/>
+			      <button class="btn ripple btn-primary" type="submit" type="button">مغادرة</button>
 		</div>
 	</form>
 

@@ -35,7 +35,7 @@ class EmportcarsFactory extends Factory
                 'exitDate' => date('Y-m-d', strtotime($entdate. ' + 3 month')),
                 'allow_increase'  =>1,
                 'increase'    => 0,
-                'duration'   => 0,
+                'duration'   => 3,
                 'status'   => 0,
                 'alerts'   => 0,
                 'takhlees'   => 0,

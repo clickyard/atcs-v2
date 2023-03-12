@@ -1,6 +1,8 @@
 <p class="mg-b-20"> بيانات السيارة</p>
 
 <div class="row row-sm col-md-9 col-lg-12">
+   
+
 
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('veh_id') ? 'has-error' : '' }}">
             <label for="veh_id" class="control-label">{{ trans('cars.veh_id') }}</label>
@@ -43,7 +45,7 @@
         <div class="col-md-5 col-lg-4 form-group {{ $errors->has('color') ? 'has-error' : '' }}">
             <label for="color" class="control-label">{{ trans('cars.color') }}</label>
             <div class="">
-                <input class="form-control" name="color" type="text" id="color" value="{{ old('color', optional($customers)->color) }}" min="1" max="100" required="true" placeholder="{{ trans('cars.color__placeholder') }}">
+                <input class="form-control" name="color" type="text" id="color" value="{{ old('color', optional($customers)->color) }}"  placeholder="{{ trans('cars.color__placeholder') }}">
                 {!! $errors->first('color', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
